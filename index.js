@@ -13,12 +13,10 @@ app.post('/webhook', (req, res) => {
 
     if (body.object === 'page') {
         body.entry.forEach(function(entry) {
-            /*entry.messaging.forEach(function(event) {
+            entry.messaging.forEach(function(event) {
                 if (event.message)
                     processMessage(event);
-            });*/
-            let webhook_event = entry.messaging[0];
-            console.log(webhook_event);
+            });
         });
         res.status(200).send('EVENT_RECEIVED');
     }
@@ -48,3 +46,32 @@ app.get('/webhook', (req, res) => {
         }
     }
 });
+
+function processMessage (event) {
+    if (!event.message.is_echo) {
+        var senderId = event.sender.id;
+        var message = event.message;
+        var sent = event.timestamp;
+
+        console.log("Received message from senderId: " + senderId);
+        console.log("Message is: " + JSON.stringify(message));
+        console.log("Message sent at: " + sent);
+
+        sendMessage(senderId, {text: "test"});
+    }
+}
+
+function sendMessage (recipientId, message) {
+    request({
+        url: "https://graph.facebook.com/v2.6/me/messages",
+        qs: {access_token: process.env.PAGE_ACCESS_TOKEN},
+        method: "POST",
+        json: {
+            recipient: {id: recipientId},
+            message: message,
+        }
+    }, function (err, response, body) {
+        if (err)
+            console.log("Error sending messages: " + err);
+    });
+}

@@ -145,7 +145,7 @@ function updateEmail (senderId, email) {
     });
 }
 
-function updateEmail (senderId, grade) {
+function updateGrade (senderId, grade) {
     Member.updateOne({user_id: senderId}, {grade: grade}, function(errU, docsU) {
         if (errU)
             console.log("Error updating grade: " + errU);

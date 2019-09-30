@@ -61,7 +61,7 @@ function processMessage (event) {
         console.log("Message is: " + JSON.stringify(message));
         console.log("Message sent at: " + sent);
 
-        var str = message.split(" ");
+        /*var str = message.split(" ");
         if (message == "sign in " + process.env.SIGNIN_KEY)
             updateMember(senderId);
         else if (str[0] == "update") {
@@ -69,7 +69,7 @@ function processMessage (event) {
                 updateEmail(senderId, str[2]);
             else if (str[1] == "grade")
                 updateGrade(senderId, str[2]);
-        }
+        }*/
     }
 }
 

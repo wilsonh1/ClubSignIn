@@ -62,10 +62,10 @@ function processMessage (event) {
         console.log("Message sent at: " + sent);
 
         sendMessage(senderId, {text: message});
-        /*var str = message.split(" ");
+        var str = message.split(" ");
         if (message == "sign in " + process.env.SIGNIN_KEY)
             updateMember(senderId);
-        else if (str[0] == "update") {
+        /*else if (str[0] == "update") {
             if (str[1] == "email")
                 updateEmail(senderId, str[2]);
             else if (str[1] == "grade")
@@ -75,7 +75,7 @@ function processMessage (event) {
 }
 
 function addMember (senderId) {
-    Member.create({user_id: senderId, points: 1, key: process.env.SIGNIN_KEY, first: true}, funtion(err, docs) {
+    Member.create({user_id: senderId, points: 1, key: process.env.SIGNIN_KEY}, funtion(err, docs) {
         if (err) {
             var query = {user_id: senderId};
             var update = {

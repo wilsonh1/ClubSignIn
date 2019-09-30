@@ -77,7 +77,18 @@ function processMessage (event) {
 function addMember (senderId) {
     Member.create({user_id: senderId, points: 1, key: process.env.SIGNIN_KEY, first: true}, function(err, docs) {
         if (err) {
-            console.log(err);
+            var query = {user_id: senderId};
+            var update = {
+                $inc: {points: 1},
+                key: process.env.SIGNIN_KEY,
+                first: false
+            }
+            Member.updateOne(query, update, function(errU, docsU) {
+                if (errU)
+                    console.log("Error updating member");
+                else
+                    console.log("Updated " + senderId + " with " + process.env.SIGNIN_KEY);
+            });
         }
         else {
             console.log("created");

@@ -98,7 +98,7 @@ function addMember (senderId) {
     console.log(process.env.SIGNIN_KEY);
 }
 
-function setName (senderId) {
+/*function setName (senderId) {
     request({
         url: "https://graph.facebook.com/v2.6/" + senderId,
         qs: {
@@ -120,7 +120,7 @@ function setName (senderId) {
             });
         }
     });
-}
+}*/
 
 function sendMessage (recipientId, message) {
     request({

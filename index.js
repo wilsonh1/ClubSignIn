@@ -67,7 +67,7 @@ function processMessage (event) {
             if (str[2] == process.env.SIGNIN_KEY)
                 updateMember(senderId);
             else
-                sendMessage(senderId, {text: "Key not valid."});
+                sendMessage(senderId, {text: "Invalid key."});
         }
         else if (str[0] == "update") {
             if (str[1] == "email")
@@ -76,7 +76,15 @@ function processMessage (event) {
                 updateGrade(senderId, str[2]);
         }
         else if (str[0] == "check")
-            checkField(senderId, str[1]);
+            getField(senderId, str[1]);
+        else if (str[0] == "help") {
+            sendMessage(senderId, {text: "sign in [key]"});
+            sendMessage(senderId, {text: "update email [address]"});
+            sendMessage(senderId, {text: "update grade [#]"});
+            sendMessage(senderId, {text: "check points"});
+            sendMessage(senderId, {text: "check email"});
+            sendMessage(senderId, {text: "check grade"});
+        }
     }
 }
 
@@ -153,7 +161,7 @@ function updateEmail (senderId, email) {
 
 function updateGrade (senderId, grade) {
     if (grade != "9" && grade != "10" && grade != "11" && grade != "12") {
-        sendMessage(senderId, {text: "Grade not valid."});
+        sendMessage(senderId, {text: "Invalid grade."});
         return;
     }
     Member.updateOne({user_id: senderId}, {grade: grade}, function(errU, docsU) {
@@ -165,7 +173,7 @@ function updateGrade (senderId, grade) {
     });
 }
 
-function checkField (senderId, field) {
+function getField (senderId, field) {
     var mQ = Member.find({user_id: senderId}).select({"points": 1, "email": 1, "grade": 1, "_id": 0}).lean();
     mQ.exec(function(errQ, docsQ) {
         if (errQ)
@@ -173,8 +181,8 @@ function checkField (senderId, field) {
         else {
             var mObj = JSON.parse(JSON.stringify(docsQ));
             if (!mObj[0][field])
-                sendMessage(senderId, {text: "No such field"});
-            else 
+                sendMessage(senderId, {text: "No such field."});
+            else
                 sendMessage(senderId, {text: mObj[0][field]});
         }
     });

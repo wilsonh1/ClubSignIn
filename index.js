@@ -6,9 +6,9 @@ const
     bodyParser = require('body-parser'),
     app = express().use(bodyParser.json());
 
-const mongoose = require('mongoose');
+/*const mongoose = require('mongoose');
 var db = mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
-var Member = require('./models/member');
+var Member = require('./models/member');*/
 
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 

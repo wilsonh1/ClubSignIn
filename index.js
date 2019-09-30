@@ -73,7 +73,7 @@ function processMessage (event) {
     }
 }
 
-function addMember (senderId) {
+/*function addMember (senderId) {
     Member.create({user_id: senderId, points: 1, key: process.env.SIGNIN_KEY, first: true}, funtion(err, docs) {
         if (err) {
             var query = {user_id: senderId};
@@ -118,7 +118,7 @@ function setName (senderId) {
             });
         }
     });
-}
+}*/
 
 function sendMessage (recipientId, message) {
     request({

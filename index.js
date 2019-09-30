@@ -65,12 +65,14 @@ function processMessage (event) {
         var str = message.text.split(" ");
         if (message.text == "sign in " + process.env.SIGNIN_KEY)
             updateMember(senderId);
-        /*else if (str[0] == "update") {
+        else if (str[0] == "update") {
             if (str[1] == "email")
-                updateEmail(senderId, str[2]);
+                console.log("email");
+                //updateEmail(senderId, str[2]);
             else if (str[1] == "grade")
-                updateGrade(senderId, str[2]);
-        }*/
+                console.log("grade");
+                //updateGrade(senderId, str[2]);
+        }
     }
 }
 
@@ -135,30 +137,6 @@ function setName (senderId) {
     });
 }
 
-/*function setName (senderId) {
-    request({
-        url: "https://graph.facebook.com/v2.6/" + senderId,
-        qs: {
-            access_token: process.env.PAGE_ACCESS_TOKEN,
-            fields: "name"
-        },
-        method: "GET"
-    }, function (err, response, body) {
-        if (err)
-            console.log("Error getting user's name: " +  err);
-        else {
-            var bodyObj = JSON.parse(body);
-            var name = bodyObj.name;
-            Member.updateOne({user_id: senderId}, {name: name}, fuction(errU, docsU) {
-                if (err1)
-                    console.log("Error setting name: " + err1);
-                else
-                    console.log("Name " + senderId + " set to " + name);
-            });
-        }
-    });
-}*/
-
 function sendMessage (recipientId, message) {
     request({
         url: "https://graph.facebook.com/v2.6/me/messages",
@@ -173,81 +151,3 @@ function sendMessage (recipientId, message) {
             console.log("Error sending messages: " + err);
     });
 }
-
-/*'use strict';
-
-const
-  request = require('request'),
-  express = require('express'),
-  bodyParser = require('body-parser'),
-  app = express().use(bodyParser.json());
-
-app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
-
-app.post('/webhook', (req, res) => {
-  let body = req.body;
-
-  if (body.object === 'page') {
-      body.entry.forEach(function(entry) {
-          entry.messaging.forEach(function(event) {
-              if (event.message)
-                  processMessage(event);
-          });
-      });
-      res.status(200).send('EVENT_RECEIVED');
-  }
-  else {
-      res.sendStatus(404);
-  }
-});
-
-app.get("/", function (req, res) {
-res.send("Deployed!");
-});
-
-app.get('/webhook', (req, res) => {
-  const VERIFY_TOKEN = process.env.VERIFICATION_TOKEN;
-
-  let mode = req.query['hub.mode'];
-  let token = req.query['hub.verify_token'];
-  let challenge = req.query['hub.challenge'];
-
-  if (mode && token) {
-      if (mode === 'subscribe' && token === VERIFY_TOKEN) {
-          console.log('WEBHOOK_VERIFIED');
-          res.status(200).send(challenge);
-      }
-      else {
-          res.sendStatus(403);
-      }
-  }
-});
-
-function processMessage (event) {
-  if (!event.message.is_echo) {
-      var senderId = event.sender.id;
-      var message = event.message;
-      var sent = event.timestamp;
-
-      console.log("Received message from senderId: " + senderId);
-      console.log("Message is: " + JSON.stringify(message));
-      console.log("Message sent at: " + sent);
-
-      sendMessage(senderId, {text: "test"});
-  }
-}
-
-function sendMessage (recipientId, message) {
-  request({
-      url: "https://graph.facebook.com/v2.6/me/messages",
-      qs: {access_token: process.env.PAGE_ACCESS_TOKEN},
-      method: "POST",
-      json: {
-          recipient: {id: recipientId},
-          message: message,
-      }
-  }, function (err, response, body) {
-      if (err)
-          console.log("Error sending messages: " + err);
-  });
-}*/

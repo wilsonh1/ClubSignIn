@@ -75,7 +75,7 @@ function processMessage (event) {
 }
 
 function addMember (senderId) {
-    Member.create({user_id: senderId, points: 1, key: "test", first: true}, function(err, docs) {
+    Member.create({user_id: senderId, points: 1, key: process.env.SIGNIN_KEY, first: true}, function(err, docs) {
         if (err) {
             console.log(err);
         }

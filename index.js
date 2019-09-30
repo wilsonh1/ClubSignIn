@@ -67,11 +67,9 @@ function processMessage (event) {
             updateMember(senderId);
         else if (str[0] == "update") {
             if (str[1] == "email")
-                console.log("email");
-                //updateEmail(senderId, str[2]);
+                updateEmail(senderId, str[2]);
             else if (str[1] == "grade")
-                console.log("grade");
-                //updateGrade(senderId, str[2]);
+                updateGrade(senderId, str[2]);
         }
     }
 }
@@ -133,6 +131,26 @@ function setName (senderId) {
                 else
                     console.log("Name " + senderId + " set to " + name);
             });
+        }
+    });
+}
+
+function updateEmail (senderId, email) {
+    Member.updateOne({user_id: senderId}, {email: email}, function(errU, docsU) {
+        if (errU)
+            console.log("Error updating email: " + errU);
+        else {
+            sendMessage(senderId, {text: "Email updated."});
+        }
+    });
+}
+
+function updateEmail (senderId, grade) {
+    Member.updateOne({user_id: senderId}, {grade: grade}, function(errU, docsU) {
+        if (errU)
+            console.log("Error updating grade: " + errU);
+        else {
+            sendMessage(senderId, {text: "Grade updated."});
         }
     });
 }

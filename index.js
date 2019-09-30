@@ -75,7 +75,7 @@ function processMessage (event) {
 }
 
 function addMember (senderId) {
-    /*Member.create({user_id: senderId, points: 1, key: process.env.SIGNIN_KEY}, funtion(err, docs) {
+    Member.create({user_id: senderId, points: 1, key: process.env.SIGNIN_KEY}, funtion(err, docs) {
         if (err) {
             var query = {user_id: senderId};
             var update = {
@@ -94,11 +94,10 @@ function addMember (senderId) {
             setName(senderId);
             sendMessage(senderId, {text: "This is your first time signing in. Send \"update email [address]\" and \"update grade [#]\" to update your email address and grade level. These can be updated at any time."});
         }
-    });*/
-    console.log(process.env.SIGNIN_KEY);
+    });
 }
 
-/*function setName (senderId) {
+function setName (senderId) {
     request({
         url: "https://graph.facebook.com/v2.6/" + senderId,
         qs: {
@@ -120,7 +119,7 @@ function addMember (senderId) {
             });
         }
     });
-}*/
+}
 
 function sendMessage (recipientId, message) {
     request({

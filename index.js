@@ -63,14 +63,20 @@ function processMessage (event) {
 
         //sendMessage(senderId, {text: message['text']});
         var str = message.text.split(" ");
-        if (message.text == "sign in " + process.env.SIGNIN_KEY)
-            updateMember(senderId);
+        if (str[0] == "sign" && str[1] == "in") {
+            if (str[2] == process.env.SIGNIN_KEY)
+                updateMember(senderId);
+            else
+                sendMessage(senderId, {text: "Key not valid."});
+        }
         else if (str[0] == "update") {
             if (str[1] == "email")
                 updateEmail(senderId, str[2]);
             else if (str[1] == "grade")
                 updateGrade(senderId, str[2]);
         }
+        else if (str[0] == "check")
+            checkField(senderId, str[1]);
     }
 }
 
@@ -146,11 +152,30 @@ function updateEmail (senderId, email) {
 }
 
 function updateGrade (senderId, grade) {
+    if (grade != "9" && grade != "10" && grade != "11" && grade != "12") {
+        sendMessage(senderId, {text: "Grade not valid."});
+        return;
+    }
     Member.updateOne({user_id: senderId}, {grade: grade}, function(errU, docsU) {
         if (errU)
             console.log("Error updating grade: " + errU);
         else {
             sendMessage(senderId, {text: "Grade updated."});
+        }
+    });
+}
+
+function checkField (senderId, field) {
+    var mQ = Member.find({user_id: senderId}).select({"points": 1, "email": 1, "grade": 1, "_id": 0}).lean();
+    mQ.exec(function(errQ, docsQ) {
+        if (errQ)
+            console.log(errQ);
+        else {
+            var mObj = JSON.parse(JSON.stringify(docsQ));
+            if (!mObj[0][field])
+                sendMessage(senderId, {text: "No such field"});
+            else 
+                sendMessage(senderId, {text: mObj[0][field]});
         }
     });
 }

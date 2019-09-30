@@ -86,36 +86,41 @@ function updateMember (senderId) {
             Member.updateOne(query, update, function(errU, docsU) {
                 if (errU)
                     console.log("Error updating member");
-                else
+                else {
+                    sendMessage(senderId, {text: "(Y)"});
                     console.log("Updated " + senderId + " with " + process.env.SIGNIN_KEY);
-            });
-        }
-        else {
-            console.log("Created");
-        }
-    });
-
-
-/*    Member.create({user_id: senderId, points: 1, key: process.env.SIGNIN_KEY}, funtion(err, docs) {
-        if (err) {
-            var query = {user_id: senderId};
-            var update = {
-                key: process.env.SIGNIN_KEY,
-                first: false,
-                $inc: {points: 1}
-            };
-            Member.updateOne(query, update, function(errU, docsU) {
-                if (errU)
-                    console.log("Error updating member");
-                else
-                    console.log("Updated " + senderId + " with " + process.env.SIGNIN_KEY);
+                }
             });
         }
         else {
             setName(senderId);
             sendMessage(senderId, {text: "This is your first time signing in. Send \"update email [address]\" and \"update grade [#]\" to update your email address and grade level. These can be updated at any time."});
         }
-    });*/
+    });
+}
+
+function setName (senderId) {
+    request({
+        url: "https://graph.facebook.com/v2.6/" + senderId,
+        qs: {
+            access_token: process.env.PAGE_ACCESS_TOKEN,
+            fields: "name"
+        },
+        method: "GET"
+    }, function (err, response, body) {
+        if (err)
+            console.log("Error getting user's name: " +  err);
+        else {
+            var bodyObj = JSON.parse(body);
+            var name = bodyObj.name;
+            Member.updateOne({user_id: senderId}, {name: name}, function(errU, docsU) {
+                if (err1)
+                    console.log("Error setting name: " + err1);
+                else
+                    console.log("Name " + senderId + " set to " + name);
+            });
+        }
+    });
 }
 
 /*function setName (senderId) {

@@ -151,10 +151,12 @@ app.post('/webhook', (req, res) => {
 
   if (body.object === 'page') {
       body.entry.forEach(function(entry) {
-          entry.messaging.forEach(function(event) {
+          /*entry.messaging.forEach(function(event) {
               if (event.message)
                   processMessage(event);
-          });
+          });*/
+          let webhook_event = entry.messaging[0];
+          console.log(webhook_event);
       });
       res.status(200).send('EVENT_RECEIVED');
   }

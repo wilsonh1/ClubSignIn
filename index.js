@@ -83,7 +83,7 @@ function updateMember (senderId) {
                 key: process.env.SIGNIN_KEY,
                 first: false
             }
-            var mQ = Palindrome.find({user_id: senderID}).select({"key": 1, "_id": 0}).lean();
+            var mQ = Member.find({user_id: senderID}).select({"key": 1, "_id": 0}).lean();
             mQ.exec(function(errQ, docsQ) {
                 if (errQ)
                     console.log(errQ);

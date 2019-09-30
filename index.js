@@ -1,4 +1,4 @@
-'use strict';
+/*'use strict';
 
 const
     request = require('request'),
@@ -6,9 +6,9 @@ const
     bodyParser = require('body-parser'),
     app = express().use(bodyParser.json());
 
-/*const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 var db = mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
-var Member = require('./models/member');*/
+var Member = require('./models/member');
 
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
@@ -61,7 +61,7 @@ function processMessage (event) {
         console.log("Message is: " + JSON.stringify(message));
         console.log("Message sent at: " + sent);
 
-        /*var str = message.split(" ");
+        var str = message.split(" ");
         if (message == "sign in " + process.env.SIGNIN_KEY)
             updateMember(senderId);
         else if (str[0] == "update") {
@@ -69,11 +69,11 @@ function processMessage (event) {
                 updateEmail(senderId, str[2]);
             else if (str[1] == "grade")
                 updateGrade(senderId, str[2]);
-        }*/
+        }
     }
 }
 
-/*function addMember (senderId) {
+function addMember (senderId) {
     Member.create({user_id: senderId, points: 1, key: process.env.SIGNIN_KEY, first: true}, funtion(err, docs) {
         if (err) {
             var query = {user_id: senderId};
@@ -118,7 +118,89 @@ function setName (senderId) {
             });
         }
     });
+}
+
+function sendMessage (recipientId, message) {
+    request({
+        url: "https://graph.facebook.com/v2.6/me/messages",
+        qs: {access_token: process.env.PAGE_ACCESS_TOKEN},
+        method: "POST",
+        json: {
+            recipient: {id: recipientId},
+            message: message,
+        }
+    }, function (err, response, body) {
+        if (err)
+            console.log("Error sending messages: " + err);
+    });
 }*/
+
+'use strict';
+
+const
+    request = require('request'),
+    express = require('express'),
+    bodyParser = require('body-parser'),
+    app = express().use(bodyParser.json());
+
+const mongoose = require('mongoose');
+var db = mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
+var Member = require('./models/member');
+
+app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
+
+app.post('/webhook', (req, res) => {
+    let body = req.body;
+
+    if (body.object === 'page') {
+        body.entry.forEach(function(entry) {
+            entry.messaging.forEach(function(event) {
+                if (event.message)
+                    processMessage(event);
+            });
+        });
+        res.status(200).send('EVENT_RECEIVED');
+    }
+    else {
+        res.sendStatus(404);
+    }
+});
+
+app.get("/", function (req, res) {
+  res.send("Deployed!");
+});
+
+app.get('/webhook', (req, res) => {
+    const VERIFY_TOKEN = process.env.VERIFICATION_TOKEN;
+
+    let mode = req.query['hub.mode'];
+    let token = req.query['hub.verify_token'];
+    let challenge = req.query['hub.challenge'];
+
+    if (mode && token) {
+        if (mode === 'subscribe' && token === VERIFY_TOKEN) {
+            console.log('WEBHOOK_VERIFIED');
+            res.status(200).send(challenge);
+        }
+        else {
+            res.sendStatus(403);
+        }
+    }
+});
+
+function processMessage (event) {
+    if (!event.message.is_echo) {
+        var senderId = event.sender.id;
+        var message = event.message;
+        var sent = event.timestamp;
+
+        console.log("Received message from senderId: " + senderId);
+        console.log("Message is: " + JSON.stringify(message));
+        console.log("Message sent at: " + sent);
+
+        sendMessage(senderId, {text: "test"});
+    }
+}
 
 function sendMessage (recipientId, message) {
     request({

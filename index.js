@@ -91,7 +91,7 @@ function addMember (senderId) {
             });
         }
         else {
-            console.log("created");
+            console.log("Created");
         }
     });
 

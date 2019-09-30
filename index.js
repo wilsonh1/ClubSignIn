@@ -54,16 +54,16 @@ app.get('/webhook', (req, res) => {
 function processMessage (event) {
     if (!event.message.is_echo) {
         var senderId = event.sender.id;
-        var message = JSON.parse(JSON.stringify(event.message));
+        var message = event.message;
         var sent = event.timestamp;
 
         console.log("Received message from senderId: " + senderId);
-        console.log("Message is: " + message);
+        console.log("Message is: " + JSON.stringify(message));
         console.log("Message sent at: " + sent);
 
         sendMessage(senderId, {text: message['text']});
-        var str = message['text'].split(" ");
-        if (message == "sign in " + process.env.SIGNIN_KEY)
+        var str = message.text.split(" ");
+        if (message.text == "sign in " + process.env.SIGNIN_KEY)
             updateMember(senderId);
         /*else if (str[0] == "update") {
             if (str[1] == "email")

@@ -61,10 +61,12 @@ function processMessage (event) {
         console.log("Message is: " + message);
         console.log("Message sent at: " + sent);
 
-        sendMessage(senderId, {text: message['text']});
+        console.log(message['text']);
+        console.log(message["text"]);
+        /*sendMessage(senderId, {text: message['text']});
         var str = message['text'].split(" ");
         if (message == "sign in " + process.env.SIGNIN_KEY)
-            updateMember(senderId);
+            updateMember(senderId);*/
         /*else if (str[0] == "update") {
             if (str[1] == "email")
                 updateEmail(senderId, str[2]);

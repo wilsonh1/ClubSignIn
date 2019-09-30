@@ -64,7 +64,7 @@ function processMessage (event) {
         sendMessage(senderId, {text: message});
         var str = message.split(" ");
         if (message == "sign in " + process.env.SIGNIN_KEY)
-            updateMember(senderId);
+            updateMember(senderId, process.env.SIGNIN_KEY);
         /*else if (str[0] == "update") {
             if (str[1] == "email")
                 updateEmail(senderId, str[2]);
@@ -74,13 +74,12 @@ function processMessage (event) {
     }
 }
 
-function addMember (senderId) {
-    //Member.create({user_id: senderId, points: 1, key: process.env.SIGNIN_KEY}, funtion(err, docs) {
-    Member.create({user_id: senderId, points: 1}, function(err, docs) {
+function addMember (senderId, skey) {
+    Member.create({user_id: senderId, points: 1, key: skey}, funtion(err, docs) {
         if (err) {
             var query = {user_id: senderId};
             var update = {
-                key: process.env.SIGNIN_KEY,
+                key: skey,
                 first: false,
                 $inc: {points: 1}
             };

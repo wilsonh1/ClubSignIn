@@ -61,8 +61,63 @@ function processMessage (event) {
         console.log("Message is: " + JSON.stringify(message));
         console.log("Message sent at: " + sent);
 
-        sendMessage(senderId, {text: "test"});
+        var str = message.split(" ");
+        if (message == "sign in " + process.env.SIGNIN_KEY)
+            updateMember(senderId);
+        else if (str[0] == "update") {
+            if (str[1] == "email")
+                updateEmail(senderId, str[2]);
+            else if (str[1] == "grade")
+                updateGrade(senderId, str[2]);
+        }
     }
+}
+
+function addMember (senderId) {
+    Member.create({user_id: senderId, points: 1, key: process.env.SIGNIN_KEY, first: true}, funtion(err, docs) {
+        if (err) {
+            var query = {user_id: senderId};
+            var update = {
+                key: process.env.SIGNIN_KEY,
+                first: false,
+                $inc: {points: 1}
+            };
+            Member.updateOne(query, update, function(errU, docsU) {
+                if (errU)
+                    console.log("Error updating member");
+                else
+                    console.log("Updated " + senderId + " with " + process.env.SIGNIN_KEY);
+            });
+        }
+        else {
+            setName(senderId);
+            sendMessage(senderId, {text: "This is your first time signing in. Send \"update email [address]\" and \"update grade [#]\" to update your email address and grade level. These can be updated at any time."});
+        }
+    });
+}
+
+function setName (senderId) {
+    request({
+        url: "https://graph.facebook.com/v2.6/" + senderId,
+        qs: {
+            access_token: process.env.PAGE_ACCESS_TOKEN,
+            fields: "name"
+        },
+        method: "GET"
+    }, function (err, response, body) {
+        if (err)
+            console.log("Error getting user's name: " +  err);
+        else {
+            var bodyObj = JSON.parse(body);
+            var name = bodyObj.name;
+            Member.updateOne({user_id: senderId}, {name: name}, fuction(errU, docsU) {
+                if (err1)
+                    console.log("Error setting name: " + err1);
+                else
+                    console.log("Name " + senderId + " set to " + name);
+            });
+        }
+    });
 }
 
 function sendMessage (recipientId, message) {

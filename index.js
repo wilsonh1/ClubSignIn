@@ -61,7 +61,7 @@ function processMessage (event) {
         console.log("Message is: " + JSON.stringify(message));
         console.log("Message sent at: " + sent);
 
-        sendMessage(senderId, {text: message['text']});
+        //sendMessage(senderId, {text: message['text']});
         var str = message.text.split(" ");
         if (message.text == "sign in " + process.env.SIGNIN_KEY)
             updateMember(senderId);
@@ -83,18 +83,30 @@ function updateMember (senderId) {
                 key: process.env.SIGNIN_KEY,
                 first: false
             }
-            Member.updateOne(query, update, function(errU, docsU) {
-                if (errU)
-                    console.log("Error updating member");
+            var mQ = Palindrome.find({user_id: senderID}).select({"key": 1, "_id": 0}).lean();
+            mQ.exec(function(errQ, docsQ) {
+                if (errQ)
+                    console.log(errQ);
                 else {
-                    sendMessage(senderId, {text: "(Y)"});
-                    console.log("Updated " + senderId + " with " + process.env.SIGNIN_KEY);
+                    var mObj = JSON.parse(JSON.stringify(docsQ));
+                    if (mObj[0]['key'] == process.env.SIGNIN_KEY)
+                        sendMessage(senderId, {text: "Already signed in for this week."});
+                    else {
+                        Member.updateOne(query, update, function(errU, docsU) {
+                            if (errU)
+                                console.log("Error updating member");
+                            else {
+                                sendMessage(senderId, {text: "(Y)"});
+                                console.log("Updated " + senderId + " with " + process.env.SIGNIN_KEY);
+                            }
+                        });
+                    }
                 }
             });
         }
         else {
             setName(senderId);
-            sendMessage(senderId, {text: "This is your first time signing in. Send \"update email [address]\" and \"update grade [#]\" to update your email address and grade level. These can be updated at any time."});
+            sendMessage(senderId, {text: "This is your first time signing in. Send \"update email [address]\" and \"update grade [#]\" to set your email address and grade level. These can be updated at any time."});
         }
     });
 }
@@ -114,8 +126,8 @@ function setName (senderId) {
             var bodyObj = JSON.parse(body);
             var name = bodyObj.name;
             Member.updateOne({user_id: senderId}, {name: name}, function(errU, docsU) {
-                if (err1)
-                    console.log("Error setting name: " + err1);
+                if (errU)
+                    console.log("Error setting name: " + errU);
                 else
                     console.log("Name " + senderId + " set to " + name);
             });

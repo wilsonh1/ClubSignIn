@@ -62,7 +62,7 @@ function processMessage (event) {
         console.log("Message sent at: " + sent);
 
         sendMessage(senderId, {text: message});
-        var str = message.split(" ");
+        var str = message['text'].split(" ");
         if (message == "sign in " + process.env.SIGNIN_KEY)
             updateMember(senderId);
         /*else if (str[0] == "update") {

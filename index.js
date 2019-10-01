@@ -85,13 +85,22 @@ function processMessage (event) {
             sendMessage(senderId, {text: "check email"});
             sendMessage(senderId, {text: "check grade"});
         }
-        else 
+        else
             sendMessage(senderId, {text: "Message not recognized."});
     }
 }
 
 function updateMember (senderId) {
-    Member.create({user_id: senderId, points: 1, key: process.env.SIGNIN_KEY, first: true}, function(err, docs) {
+    var create = {
+        user_id: senderId,
+        name: "",
+        email: "",
+        grade: 0,
+        points: 1,
+        key: process.env.SIGNIN_KEY,
+        first: true
+    };
+    Member.create(create, function(err, docs) {
         if (err) {
             var query = {user_id: senderId};
             var update = {
@@ -99,7 +108,7 @@ function updateMember (senderId) {
                 key: process.env.SIGNIN_KEY,
                 first: false
             }
-            var mQ = Member.find({user_id: senderId}).select({"key": 1, "_id": 0}).lean();
+            var mQ = Member.find({user_id: senderId}).select({key: 1, _id: 0}).lean();
             mQ.exec(function(errQ, docsQ) {
                 if (errQ)
                     console.log(errQ);
@@ -176,7 +185,7 @@ function updateGrade (senderId, grade) {
 }
 
 function getField (senderId, field) {
-    var mQ = Member.find({user_id: senderId}).select({"points": 1, "email": 1, "grade": 1, "_id": 0}).lean();
+    var mQ = Member.find({user_id: senderId}).select({points: 1, email: 1, grade: 1, _id: 0}).lean();
     mQ.exec(function(errQ, docsQ) {
         if (errQ)
             console.log(errQ);

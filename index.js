@@ -61,32 +61,35 @@ function processMessage (event) {
         console.log("Message is: " + JSON.stringify(message));
         console.log("Message sent at: " + sent);
 
-        //sendMessage(senderId, {text: message['text']});
-        var str = message.text.split(" ");
-        if (str[0] == "sign" && str[1] == "in") {
-            if (str[2] == process.env.SIGNIN_KEY)
-                updateMember(senderId);
-            else
-                sendMessage(senderId, {text: "Invalid key."});
-        }
-        else if (str[0] == "update") {
-            if (str[1] == "email")
-                updateEmail(senderId, str[2]);
-            else if (str[1] == "grade")
-                updateGrade(senderId, str[2]);
-        }
-        else if (str[0] == "check")
-            getField(senderId, str[1]);
-        else if (str[0] == "help") {
-            sendMessage(senderId, {text: "sign in [key]"});
-            sendMessage(senderId, {text: "update email [address]"});
-            sendMessage(senderId, {text: "update grade [#]"});
-            sendMessage(senderId, {text: "check points"});
-            sendMessage(senderId, {text: "check email"});
-            sendMessage(senderId, {text: "check grade"});
-        }
-        else
+        if (!message.text)
             sendMessage(senderId, {text: "Message not recognized."});
+        else {
+            var str = message.text.split(" ");
+            if (str[0] == "sign" && str[1] == "in") {
+                if (str[2] == process.env.SIGNIN_KEY)
+                    updateMember(senderId);
+                else
+                    sendMessage(senderId, {text: "Invalid key."});
+            }
+            else if (str[0] == "update") {
+                if (str[1] == "email")
+                    updateEmail(senderId, str[2]);
+                else if (str[1] == "grade")
+                    updateGrade(senderId, str[2]);
+            }
+            else if (str[0] == "check")
+                getField(senderId, str[1]);
+            else if (str[0] == "help") {
+                sendMessage(senderId, {text: "sign in [key]"});
+                sendMessage(senderId, {text: "update email [address]"});
+                sendMessage(senderId, {text: "update grade [#]"});
+                sendMessage(senderId, {text: "check points"});
+                sendMessage(senderId, {text: "check email"});
+                sendMessage(senderId, {text: "check grade"});
+            }
+            else
+                sendMessage(senderId, {text: "Message not recognized."});
+        }
     }
 }
 

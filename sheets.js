@@ -218,7 +218,7 @@ function updateSheet(auth) {
                 }
             });
             Member.updateMany({first: true}, {first: false}, function(errF, docsF) {
-                if (errU)
+                if (errF)
                     console.log("Error updating member");
                 else
                     console.log("Updated");

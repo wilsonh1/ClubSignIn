@@ -108,8 +108,8 @@ function updateMember (senderId) {
             var query = {user_id: senderId};
             var update = {
                 $inc: {points: 1},
-                key: process.env.SIGNIN_KEY,
-                first: false
+                key: process.env.SIGNIN_KEY
+                //first: false
             }
             var mQ = Member.find({user_id: senderId}).select({key: 1, _id: 0}).lean();
             mQ.exec(function(errQ, docsQ) {

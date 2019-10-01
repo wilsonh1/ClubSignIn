@@ -217,6 +217,12 @@ function updateSheet(auth) {
                     });
                 }
             });
+            Member.updateMany({first: true}, {first: false}, function(errF, docsF) {
+                if (errU)
+                    console.log("Error updating member");
+                else
+                    console.log("Updated");
+            });
         }
     });
 }

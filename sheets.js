@@ -8,7 +8,7 @@ const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 const TOKEN_PATH = 'token.json';
 
 const mongoose = require('mongoose');
-var db = mongoose.connect("mongodb+srv://wilsonh1:zXCnIwxzZ68mOmug@cluster0-ylqyf.mongodb.net/test?retryWrites=true&w=majority", {useNewUrlParser: true});
+var db = mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
 var Member = require('./models/member');
 
 fs.readFile('credentials.json', (err, content) => {
@@ -91,7 +91,7 @@ function updateSheet(auth) {
             };
             sheets.spreadsheets.values.update({
                 spreadsheetId: '1vxTdHjnw58ji-yeZ-KStYa4xDj58cEcR1s1ya2Lhyig',
-                range: 'Sheet1!A1:E',
+                range: 'Sheet1!A2:E',
                 valueInputOption: 'RAW',
                 resource: resource
             }, (err, res) => {

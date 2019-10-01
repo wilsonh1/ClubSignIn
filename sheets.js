@@ -53,47 +53,6 @@ function getNewToken(oAuth2Client, callback) {
 }
 
 function updateSheet(auth) {
-  /*const sheets = google.sheets({version: 'v4', auth});
-  sheets.spreadsheets.values.get({
-    spreadsheetId: '1vxTdHjnw58ji-yeZ-KStYa4xDj58cEcR1s1ya2Lhyig',
-    range: 'Sheet1!A2:E'
-  }, (err, res) => {
-    if (err) return console.log('The API returned an error: ' + err);
-    const rows = res.data.values;
-    if (rows.length) {
-      console.log('Name, Major:');
-      rows.map((row) => {
-        console.log(`${row[0]}, ${row[4]}`);
-      });
-    } else {
-      console.log('No data found.');
-    }
-});*/
-    /*const sheets = google.sheets({version: 'v4', auth});
-    var mQ = Member.find({}).select(fields).lean();
-    mQ.exec(function(errQ, docsQ) {
-        if (errQ)
-            console.log(errQ);
-        else {
-            var mObj = JSON.parse(JSON.stringify(docsQ));
-            const data = mObj.map(row => Object.values(row));
-            //console.log(data);
-            const resource = {
-                values: data
-            };
-            sheets.spreadsheets.values.update({
-                spreadsheetId: '1vxTdHjnw58ji-yeZ-KStYa4xDj58cEcR1s1ya2Lhyig',
-                range: 'Sheet1!A2:E',
-                valueInputOption: 'RAW',
-                resource: resource
-            }, (err, res) => {
-                if (err)
-                    console.log(err);
-                else
-                    console.log("%d cells updated.", res.data.updatedCells);
-            });
-        }
-    });*/
     const sheets = google.sheets({version: 'v4', auth});
 
     sheets.spreadsheets.values.get({

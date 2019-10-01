@@ -95,10 +95,9 @@ function updateSheet(auth) {
         }
     });*/
     const sheets = google.sheets({version: 'v4', auth});
-    const sheetId = '1vxTdHjnw58ji-yeZ-KStYa4xDj58cEcR1s1ya2Lhyig';
 
     sheets.spreadsheets.values.get({
-        spreadsheetId: sheetId,
+        spreadsheetId: process.env.SHEET_ID,
         range: 'Sheet1!A2:A'
     }, (err, res) => {
         if (err)
@@ -133,7 +132,7 @@ function updateSheet(auth) {
                             console.log(resource.values);
                             console.log('Sheet1!C' + ind[m['user_id']] + ':E' + ind[m['user_id']]);
                             sheets.spreadsheets.values.update({
-                                spreadsheetId: sheetId,
+                                spreadsheetId: process.env.SHEET_ID,
                                 range: 'Sheet1!C' + ind[m['user_id']] + ':E' + ind[m['user_id']],
                                 valueInputOption: 'RAW',
                                 resource: resource
@@ -149,8 +148,8 @@ function updateSheet(auth) {
                                     values: [[1]]
                                 };
                                 sheets.spreadsheets.values.update({
-                                    spreadsheetId: sheetId,
-                                    range: 'Sheet1!' + process.env.SHEETS_NXTCOL + ind[m['user_id']] + ':Z' + ind[m['user_id']],
+                                    spreadsheetId: process.env.SHEET_ID,
+                                    range: 'Sheet1!' + process.env.SHEET_NXTCOL + ind[m['user_id']] + ':Z' + ind[m['user_id']],
                                     valueInputOption: 'RAW',
                                     resource: r2
                                 }, (err2, res2) => {
@@ -189,7 +188,7 @@ function updateSheet(auth) {
                     values: data
                 };
                 sheets.spreadsheets.values.append({
-                    spreadsheetId: sheetId,
+                    spreadsheetId: process.env.SHEET_ID,
                     range: 'Sheet1!A2',
                     valueInputOption: 'RAW',
                     resource: resource
@@ -202,11 +201,11 @@ function updateSheet(auth) {
                             values: new Array(data.length).fill(new Array(1).fill(1))
                         };
                         var range = res.data.updates.updatedRange;
-                        range = range.replace('A', process.env.SHEETS_NXTCOL);
-                        range = range.replace('E', process.env.SHEETS_NXTCOL);
+                        range = range.replace('A', process.env.SHEET_NXTCOL);
+                        range = range.replace('E', process.env.SHEET_NXTCOL);
                         console.log(range);
                         sheets.spreadsheets.values.update({
-                            spreadsheetId: sheetId,
+                            spreadsheetId: process.env.SHEET_ID,
                             range: range,
                             valueInputOption: 'RAW',
                             resource: r2

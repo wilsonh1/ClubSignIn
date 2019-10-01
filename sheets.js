@@ -183,46 +183,48 @@ function updateSheet(auth) {
             console.log(errA);
         else {
             var mObj = JSON.parse(JSON.stringify(docsA));
-            const data = mObj.map(row => Object.values(row));
-            const resource = {
-                values: data
-            };
-            sheets.spreadsheets.values.append({
-                spreadsheetId: sheetId,
-                range: 'Sheet1!A2',
-                valueInputOption: 'RAW',
-                resource: resource
-            }, (err, res) => {
-                if (err)
-                    console.log(err);
-                else {
-                    console.log("%d cells updated.", res.data.updates.updatedCells);
-                    const r2 = {
-                        values: new Array(data.length).fill(new Array(1).fill(1))
-                    };
-                    var range = res.data.updates.updatedRange;
-                    range = range.replace('A', process.env.SHEETS_NXTCOL);
-                    range = range.replace('E', process.env.SHEETS_NXTCOL);
-                    console.log(range);
-                    sheets.spreadsheets.values.update({
-                        spreadsheetId: sheetId,
-                        range: range,
-                        valueInputOption: 'RAW',
-                        resource: r2
-                    }, (err2, res2) => {
-                        if (err2)
-                            console.log(err2);
-                        else
-                            console.log("%d cells updated.", res2.data.updatedCells);
-                    });
-                }
-            });
-            Member.updateMany({first: true}, {first: false}, function(errF, docsF) {
-                if (errF)
-                    console.log("Error updating member");
-                else
-                    console.log("Updated");
-            });
+            if (mObj.length) {
+                const data = mObj.map(row => Object.values(row));
+                const resource = {
+                    values: data
+                };
+                sheets.spreadsheets.values.append({
+                    spreadsheetId: sheetId,
+                    range: 'Sheet1!A2',
+                    valueInputOption: 'RAW',
+                    resource: resource
+                }, (err, res) => {
+                    if (err)
+                        console.log(err);
+                    else {
+                        console.log("%d cells updated.", res.data.updates.updatedCells);
+                        const r2 = {
+                            values: new Array(data.length).fill(new Array(1).fill(1))
+                        };
+                        var range = res.data.updates.updatedRange;
+                        range = range.replace('A', process.env.SHEETS_NXTCOL);
+                        range = range.replace('E', process.env.SHEETS_NXTCOL);
+                        console.log(range);
+                        sheets.spreadsheets.values.update({
+                            spreadsheetId: sheetId,
+                            range: range,
+                            valueInputOption: 'RAW',
+                            resource: r2
+                        }, (err2, res2) => {
+                            if (err2)
+                                console.log(err2);
+                            else
+                                console.log("%d cells updated.", res2.data.updatedCells);
+                        });
+                    }
+                });
+                Member.updateMany({first: true}, {first: false}, function(errF, docsF) {
+                    if (errF)
+                        console.log("Error updating member");
+                    else
+                        console.log("Updated");
+                });
+            }
         }
     });
 }

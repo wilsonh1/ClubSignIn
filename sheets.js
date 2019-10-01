@@ -77,7 +77,7 @@ function updateSheet(auth) {
         points: 1,
         _id: 0
     };
-    var mQ = Member.find({}).select(fields).lean();
+    var mQ = Member.find({}).select(fields).sort({user_id: 1}).lean();
     mQ.exec(function(errQ, docsQ) {
         if (errQ)
             console.log(errQ);

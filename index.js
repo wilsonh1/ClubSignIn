@@ -85,6 +85,8 @@ function processMessage (event) {
             sendMessage(senderId, {text: "check email"});
             sendMessage(senderId, {text: "check grade"});
         }
+        else 
+            sendMessage(senderId, {text: "Message not recognized."});
     }
 }
 

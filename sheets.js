@@ -63,7 +63,6 @@ function updateSheet(auth) {
             console.log(err);
         else {
             const rows = res.data.values;
-            console.log(rows);
             if (!rows)
                 console.log("No data found");
             else {
@@ -142,7 +141,6 @@ function updateSheet(auth) {
             console.log(errA);
         else {
             var mObj = JSON.parse(JSON.stringify(docsA));
-            console.log(mObj+ " " + mObj.length);
             if (mObj.length) {
                 const data = mObj.map(row => Object.values(row));
                 const resource = {

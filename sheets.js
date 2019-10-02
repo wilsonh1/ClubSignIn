@@ -63,7 +63,9 @@ function updateSheet(auth) {
             console.log(err);
         else {
             const rows = res.data.values;
-            if (rows.length) {
+            if (!rows)
+                console.log("No data found");
+            else {
                 var ind = {};
                 var i = "2";
                 rows.forEach(function(row) {
@@ -122,8 +124,6 @@ function updateSheet(auth) {
                     }
                 });
             }
-            else
-                console.log("No data found");
         }
     });
 

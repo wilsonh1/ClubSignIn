@@ -11,8 +11,7 @@ const mongoose = require('mongoose');
 var db = mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
 var Member = require('./models/member');
 
-//fs.readFile('credentials.json', (err, content) => {
-fs.readFile(process.env.CREDENTIALS, (err, content) => {
+fs.readFile('credentials.json', (err, content) => {
     if (err) return console.log('Error loading client secret file:', err);
     authorize(JSON.parse(content), updateSheet);
 });

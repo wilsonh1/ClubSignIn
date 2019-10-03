@@ -23,7 +23,7 @@ function updateSheet(auth) {
 
     sheets.spreadsheets.values.get({
         spreadsheetId: process.env.SHEET_ID,
-        range: 'Sheet1!A2:A'
+        range: 'Points!A2:A'
     }, (err, res) => {
         if (err)
             console.log(err);
@@ -57,10 +57,10 @@ function updateSheet(auth) {
                                 values: [[m['email'], m['grade'], m['points']]]
                             };
                             console.log(resource.values);
-                            console.log('Sheet1!C' + ind[m['user_id']] + ':E' + ind[m['user_id']]);
+                            console.log('Points!C' + ind[m['user_id']] + ':E' + ind[m['user_id']]);
                             sheets.spreadsheets.values.update({
                                 spreadsheetId: process.env.SHEET_ID,
-                                range: 'Sheet1!C' + ind[m['user_id']] + ':E' + ind[m['user_id']],
+                                range: 'Points!C' + ind[m['user_id']] + ':E' + ind[m['user_id']],
                                 valueInputOption: 'RAW',
                                 resource: resource
                             }, (err, res) => {
@@ -76,7 +76,7 @@ function updateSheet(auth) {
                                 };
                                 sheets.spreadsheets.values.update({
                                     spreadsheetId: process.env.SHEET_ID,
-                                    range: 'Sheet1!' + process.env.SHEET_NXTCOL + ind[m['user_id']] + ':Z' + ind[m['user_id']],
+                                    range: 'Points!' + process.env.SHEET_NXTCOL + ind[m['user_id']] + ':Z' + ind[m['user_id']],
                                     valueInputOption: 'RAW',
                                     resource: r2
                                 }, (err2, res2) => {
@@ -114,7 +114,7 @@ function updateSheet(auth) {
                 };
                 sheets.spreadsheets.values.append({
                     spreadsheetId: process.env.SHEET_ID,
-                    range: 'Sheet1!A2',
+                    range: 'Points!A2',
                     valueInputOption: 'RAW',
                     resource: resource
                 }, (err, res) => {

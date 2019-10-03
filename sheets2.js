@@ -13,7 +13,11 @@ const key = "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwgg
 const jwt = new google.auth.JWT(process.env.CLIENT_EMAIL, null, key, SCOPES);
 
 jwt.authorize((err, response) => {
-    const sheets = google.sheets({version: 'v4', jwt});
+    updateSheet(jwt);
+});
+
+function updateSheet(auth) {
+    const sheets = google.sheets({version: 'v4', auth});
 
     sheets.spreadsheets.values.get({
         spreadsheetId: process.env.SHEET_ID,
@@ -145,4 +149,4 @@ jwt.authorize((err, response) => {
             }
         }
     });
-});
+}

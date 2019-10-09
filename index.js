@@ -194,7 +194,7 @@ function getField (senderId, field) {
         else {
             var mObj = JSON.parse(JSON.stringify(docsQ));
             if (!mObj[0][field])
-                sendMessage(senderId, {text: "No such field."});
+                sendMessage(senderId, {text: "Not found."});
             else
                 sendMessage(senderId, {text: mObj[0][field]});
         }

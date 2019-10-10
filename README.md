@@ -4,6 +4,8 @@ Facebook chatbot for signing into clubs.
 
 ## Setup
 + Spreadsheet format [example](https://docs.google.com/spreadsheets/d/1vxTdHjnw58ji-yeZ-KStYa4xDj58cEcR1s1ya2Lhyig/edit?usp=sharing)
+    + Order of columns is important
+    + Sheet name must be "Points"
 
 ## Usage
 + Heroku CLI

@@ -23,7 +23,7 @@ function updateSheet(auth) {
 
     sheets.spreadsheets.values.get({
         spreadsheetId: process.env.SHEET_ID,
-        range: 'Points!A2:A'
+        range: 'Points!A3:A'
     }, (err, res) => {
         if (err)
             console.log(err);
@@ -33,7 +33,7 @@ function updateSheet(auth) {
                 console.log("No data found");
             else {
                 var ind = {};
-                var i = "2";
+                var i = "3";
                 rows.forEach(function(row) {
                     ind[row[0]] = i;
                     i++;
@@ -114,7 +114,7 @@ function updateSheet(auth) {
                 };
                 sheets.spreadsheets.values.append({
                     spreadsheetId: process.env.SHEET_ID,
-                    range: 'Points!A2',
+                    range: 'Points!A3',
                     valueInputOption: 'RAW',
                     resource: resource
                 }, (err, res) => {

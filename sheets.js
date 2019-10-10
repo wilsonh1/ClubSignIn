@@ -72,7 +72,7 @@ function updateSheet(auth) {
 
                             if (m['key'] == process.env.SIGNIN_KEY) {
                                 const r2 = {
-                                    values: [[1]]
+                                    values: [[5]]
                                 };
                                 sheets.spreadsheets.values.update({
                                     spreadsheetId: process.env.SHEET_ID,
@@ -123,7 +123,7 @@ function updateSheet(auth) {
                     else {
                         console.log("%d cells updated.", res.data.updates.updatedCells);
                         const r2 = {
-                            values: new Array(data.length).fill(new Array(1).fill(1))
+                            values: new Array(data.length).fill(new Array(1).fill(5))
                         };
                         var range = res.data.updates.updatedRange;
                         range = range.replace('A', process.env.SHEET_NXTCOL);

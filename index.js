@@ -99,7 +99,7 @@ function updateMember (senderId) {
         name: "",
         email: "",
         grade: 0,
-        points: 1,
+        points: 5,
         key: process.env.SIGNIN_KEY,
         first: true
     };
@@ -107,7 +107,7 @@ function updateMember (senderId) {
         if (err) {
             var query = {user_id: senderId};
             var update = {
-                $inc: {points: 1},
+                $inc: {points: 5},
                 key: process.env.SIGNIN_KEY
             }
             var mQ = Member.find({user_id: senderId}).select({key: 1, _id: 0}).lean();
@@ -163,6 +163,10 @@ function setName (senderId) {
 }
 
 function updateEmail (senderId, email) {
+    if (email.indexOf('@') == -1) {
+        sendMessage(senderId, {text: "Invalid email."});
+        return;
+    }
     Member.updateOne({user_id: senderId}, {email: email}, function(errU, docsU) {
         if (errU)
             console.log("Error updating email: " + errU);

@@ -140,7 +140,7 @@ function updateMember (senderId) {
 
 function setName (senderId) {
     request({
-        url: "https://graph.facebook.com/v2.6/" + senderId,
+        url: "https://graph.facebook.com/v4.0/" + senderId,
         qs: {
             access_token: process.env.PAGE_ACCESS_TOKEN,
             fields: "name"
@@ -208,7 +208,7 @@ function getField (senderId, field) {
 function sendMessage (recipientId, message) {
     console.log("Sending message to: " + recipientId);
     request({
-        url: "https://graph.facebook.com/v2.6/me/messages",
+        url: "https://graph.facebook.com/v4.0/me/messages",
         qs: {access_token: process.env.PAGE_ACCESS_TOKEN},
         method: "POST",
         json: {

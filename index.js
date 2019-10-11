@@ -62,7 +62,7 @@ function processMessage (event) {
         console.log("Message sent at: " + sent);
 
         if (!message.text)
-            sendMessage(senderId, {text: "Message not recognized."});
+            sendMessage(senderId, {text: "Message not recognized. Send \"help\" for a list of valid messages."});
         else {
             var str = message.text.split(" ");
             if (str[0] == "sign" && str[1] == "in") {
@@ -88,7 +88,7 @@ function processMessage (event) {
                 sendMessage(senderId, {text: "check grade"});
             }
             else
-                sendMessage(senderId, {text: "Message not recognized."});
+                sendMessage(senderId, {text: "Message not recognized. Send \"help\" for a list of valid messages."});
         }
     }
 }

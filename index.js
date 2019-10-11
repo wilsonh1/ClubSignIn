@@ -206,7 +206,6 @@ function getField (senderId, field) {
 }
 
 function sendMessage (recipientId, message) {
-    console.log("Sending message to: " + recipientId);
     request({
         url: "https://graph.facebook.com/v4.0/me/messages",
         qs: {access_token: process.env.PAGE_ACCESS_TOKEN},
@@ -218,8 +217,5 @@ function sendMessage (recipientId, message) {
     }, function (err, response, body) {
         if (err)
             console.log("Error sending messages: " + err);
-        else {
-            console.log("Sent message: " + response)
-        }
     });
 }

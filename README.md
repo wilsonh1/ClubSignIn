@@ -9,15 +9,28 @@ Messenger bot for signing into clubs.
 
 ## Usage
 + Heroku CLI
-    1. Updating the sign in key
+
+    1. Update sign in key
         ```bash
         heroku config:set --app=club-sign-in SIGNIN_KEY=[key]
         ```
-    2. Setting next column in points spreadsheet
+    2. Set next column in points spreadsheet
         ```bash
         heroku config:set --app=club-sign-in SHEET_NXTCOL=[col]
         ```
-    3. Updating spreadsheet
+    3. Update spreadsheet
         ```bash
         heroku run --app=club-sign-in node sheets.js
         ```
+
++ Manually adding members
+
+    1. Create a new document on mongoDB
+        + `user_id` must be unique
+        + Set `first` to `true`
+    2. Points must be updated on mongoDB
+    2. Running `sheets.js` will create and update new rows automatically
+
++ _Note:_ Previous sign ins are not stored, and sign ins are not separated by week
+    + To accurately track meetings, the spreadsheet must be updated before the next meeting
+    + Do not use the same key for multiple meetings

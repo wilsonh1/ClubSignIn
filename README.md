@@ -8,8 +8,7 @@ Messenger bot for signing into clubs.
     + Sheet name must be "Points"
 
 ## Usage
-1. Heroku CLI
-
++ Heroku CLI
     1. Update sign in key
         ```bash
         heroku config:set --app=club-sign-in SIGNIN_KEY=[key]
@@ -24,7 +23,6 @@ Messenger bot for signing into clubs.
         ```
 
 + Manually adding members
-
     1. Create a new document on mongoDB
         + `user_id` must be unique
         + Set `first` to `true`

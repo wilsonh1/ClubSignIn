@@ -8,7 +8,7 @@ Messenger bot for signing into clubs.
     + Sheet name must be "Points"
 
 ## Usage
-+ Heroku CLI
+1. Heroku CLI
 
     1. Update sign in key
         ```bash
@@ -31,6 +31,6 @@ Messenger bot for signing into clubs.
     2. Points must be updated on mongoDB
     2. Running `sheets.js` will create and update new rows automatically
 
-+ _Note:_ Previous sign ins are not stored, and sign ins are not separated by week
++ **Note:** Previous sign ins are not stored, and sign ins are not separated by week
     + To accurately track meetings, the spreadsheet must be updated before the next meeting
     + Do not use the same key for multiple meetings

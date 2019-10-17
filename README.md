@@ -26,7 +26,7 @@ Messenger bot for signing into clubs.
     1. Create a new document on mongoDB
         + `user_id` must be unique
         + Set `first` to `true`
-    2. Points must be updated on mongoDB
+    2. All fields must be updated on mongoDB
     2. Updating the spreadsheet will create new rows automatically
 
 + **Note:** Previous sign ins are not stored, and sign ins are not separated by week

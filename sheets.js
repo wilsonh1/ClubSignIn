@@ -93,8 +93,37 @@ function updateSheet(auth) {
                                 });
                             }*/
                         });
-                        console.log(updM);
-                        console.log(updIn);
+                        //console.log(updM);
+                        //console.log(updIn);
+                        const rM = {
+                            values: updM
+                        };
+                        sheets.spreadsheets.values.update({
+                            spreadsheetId: process.env.SHEET_ID,
+                            range: 'Points!C3:E',
+                            valueInputOption: 'RAW',
+                            resource: rM
+                        }, (err, res) => {
+                            if (err)
+                                console.log(err);
+                            else
+                                console.log("%d cells updated.", res.data.updatedCells);
+                        });
+
+                        const rIn = {
+                            values: updIn
+                        };
+                        sheets.spreadsheets.values.update({
+                            spreadsheetId: process.env.SHEET_ID,
+                            range: 'Points!' + process.env.SHEET_NXTCOL + '3:Z',
+                            valueInputOption: 'RAW',
+                            resource: rIn
+                        }, (err2, res2) => {
+                            if (err2)
+                                console.log(err2);
+                            else
+                                console.log("%d cells updated.", res2.data.updatedCells);
+                        });
                     }
                 });
             }

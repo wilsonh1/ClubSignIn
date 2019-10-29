@@ -33,11 +33,12 @@ function updateSheet(auth) {
                 console.log("No data found");
             else {
                 var ind = {};
-                var i = "3";
+                var cnt = 0;
                 rows.forEach(function(row) {
-                    ind[row[0]] = i;
-                    i++;
+                    ind[row[0]] = cnt;
+                    cnt++;
                 });
+
                 var fQ = {
                     user_id: 1,
                     email: 1,
@@ -51,9 +52,14 @@ function updateSheet(auth) {
                     if (errQ)
                         console.log(errQ);
                     else {
+                        var updM = new Array(cnt);
+                        var updIn = new Array(cnt);
+
                         var mObj = JSON.parse(JSON.stringify(docsQ));
                         mObj.forEach(function(m) {
-                            const resource = {
+                            updM[ind[m['user_id']]] = [m['email'], m['grade'], m['points']];
+                            updIn[ind[m['user_id']]] = (m['key'] == process.env.SIGNIN_KEY) ? [5] : [0];
+                            /*const resource = {
                                 values: [[m['email'], m['grade'], m['points']]]
                             };
                             console.log(resource.values);
@@ -85,8 +91,10 @@ function updateSheet(auth) {
                                     else
                                         console.log("%d cells updated.", res2.data.updatedCells);
                                 });
-                            }
+                            }*/
                         });
+                        console.log(updM);
+                        console.log(updIn);
                     }
                 });
             }

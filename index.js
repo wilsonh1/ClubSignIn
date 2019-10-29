@@ -7,7 +7,7 @@ const
     app = express().use(bodyParser.json());
 
 const mongoose = require('mongoose');
-var db = mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
+var db = mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology: true});
 var Member = require('./models/member');
 
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));

@@ -59,42 +59,10 @@ function updateSheet(auth) {
                         mObj.forEach(function(m) {
                             updM[ind[m['user_id']]] = [m['email'], m['grade'], m['points']];
                             updIn[ind[m['user_id']]] = (m['key'] == process.env.SIGNIN_KEY) ? [5] : [0];
-                            /*const resource = {
-                                values: [[m['email'], m['grade'], m['points']]]
-                            };
-                            console.log(resource.values);
-                            console.log('Points!C' + ind[m['user_id']] + ':E' + ind[m['user_id']]);
-                            sheets.spreadsheets.values.update({
-                                spreadsheetId: process.env.SHEET_ID,
-                                range: 'Points!C' + ind[m['user_id']] + ':E' + ind[m['user_id']],
-                                valueInputOption: 'RAW',
-                                resource: resource
-                            }, (err, res) => {
-                                if (err)
-                                    console.log(err);
-                                else
-                                    console.log("%d cells updated.", res.data.updatedCells);
-                            });
-
-                            if (m['key'] == process.env.SIGNIN_KEY) {
-                                const r2 = {
-                                    values: [[5]]
-                                };
-                                sheets.spreadsheets.values.update({
-                                    spreadsheetId: process.env.SHEET_ID,
-                                    range: 'Points!' + process.env.SHEET_NXTCOL + ind[m['user_id']] + ':Z' + ind[m['user_id']],
-                                    valueInputOption: 'RAW',
-                                    resource: r2
-                                }, (err2, res2) => {
-                                    if (err2)
-                                        console.log(err2);
-                                    else
-                                        console.log("%d cells updated.", res2.data.updatedCells);
-                                });
-                            }*/
                         });
-                        //console.log(updM);
-                        //console.log(updIn);
+                        console.log(updM);
+                        console.log(updIn);
+
                         const rM = {
                             values: updM
                         };

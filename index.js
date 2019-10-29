@@ -64,7 +64,7 @@ function processMessage (event) {
         if (!message.text)
             sendMessage(senderId, {text: "Message not recognized. Send \"help\" for a list of valid messages."});
         else {
-            var str = message.text.split(" ");
+            var str = message.text.toLowerCase().split(" ");
             if (str[0] == "sign" && str[1] == "in") {
                 if (str[2] == process.env.SIGNIN_KEY)
                     updateMember(senderId);
@@ -163,7 +163,7 @@ function setName (senderId) {
 }
 
 function updateEmail (senderId, email) {
-    if (email.indexOf('@') == -1) {
+    if (!email || email.indexOf('@') == -1) {
         sendMessage(senderId, {text: "Invalid email."});
         return;
     }

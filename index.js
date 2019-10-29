@@ -171,7 +171,10 @@ function updateEmail (senderId, email) {
         if (errU)
             console.log("Error updating email: " + errU);
         else {
-            sendMessage(senderId, {text: "Email updated."});
+            if (!docsU.n)
+                sendMessage(senderId, {text: "Not found."});
+            else
+                sendMessage(senderId, {text: "Email updated."});
         }
     });
 }
@@ -185,7 +188,10 @@ function updateGrade (senderId, grade) {
         if (errU)
             console.log("Error updating grade: " + errU);
         else {
-            sendMessage(senderId, {text: "Grade updated."});
+            if (!docsU.n)
+                sendMessage(senderId, {text: "Not found."});
+            else
+                sendMessage(senderId, {text: "Grade updated."});
         }
     });
 }

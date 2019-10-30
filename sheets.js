@@ -32,12 +32,15 @@ function updateSheet(auth) {
             if (!rows)
                 console.log("No data found");
             else {
-                var ind = {};
-                var cnt = 0;
+                //var ind = {};
+                //var cnt = 0;
+                var id = [];
                 rows.forEach(function(row) {
-                    ind[row[0]] = cnt;
-                    cnt++;
+                    /*ind[row[0]] = cnt;
+                    cnt++;*/
+                    id.push(row[0]);
                 });
+                console.log(id);
 
                 var fQ = {
                     user_id: 1,
@@ -47,7 +50,7 @@ function updateSheet(auth) {
                     key: 1,
                     _id: 0
                 };
-                var mQ = Member.find({first: false}).select(fQ).lean();
+                var mQ = Member.find({user_id: {$in: id}}).select(fQ).lean();
                 mQ.exec(function(errQ, docsQ) {
                     if (errQ)
                         console.log(errQ);
@@ -57,8 +60,9 @@ function updateSheet(auth) {
 
                         var mObj = JSON.parse(JSON.stringify(docsQ));
                         mObj.forEach(function(m) {
-                            updM[ind[m['user_id']]] = [m['email'], m['grade'], m['points']];
-                            updIn[ind[m['user_id']]] = (m['key'] == process.env.SIGNIN_KEY) ? [5] : [0];
+                            console.log(m['user_id'] + " " + id.indexOf(m['user_id']));
+                            updM[id.indexOf(m['user_id'])] = [m['email'], m['grade'], m['points']];
+                            updIn[id.indexOf(m['user_id'])] = (m['key'] == process.env.SIGNIN_KEY) ? [5] : [0];
                         });
                         console.log(updM);
                         console.log(updIn);
@@ -98,7 +102,7 @@ function updateSheet(auth) {
         }
     });
 
-    var fields = {
+    var fA = {
         user_id: 1,
         name: 1,
         email: 1,
@@ -106,7 +110,7 @@ function updateSheet(auth) {
         points: 1,
         _id: 0
     };
-    var mA = Member.find({first: true}).select(fields).lean();
+    var mA = Member.find({first: true}).select(fA).lean();
     mA.exec(function(errA, docsA) {
         if (errA)
             console.log(errA);

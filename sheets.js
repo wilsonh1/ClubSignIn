@@ -32,15 +32,10 @@ function updateSheet(auth) {
             if (!rows)
                 console.log("No data found");
             else {
-                //var ind = {};
-                //var cnt = 0;
                 var id = [];
                 rows.forEach(function(row) {
-                    /*ind[row[0]] = cnt;
-                    cnt++;*/
                     id.push(row[0]);
                 });
-                console.log(id);
 
                 var fQ = {
                     user_id: 1,
@@ -60,7 +55,6 @@ function updateSheet(auth) {
 
                         var mObj = JSON.parse(JSON.stringify(docsQ));
                         mObj.forEach(function(m) {
-                            console.log(m['user_id'] + " " + id.indexOf(m['user_id']));
                             updM[id.indexOf(m['user_id'])] = [m['email'], m['grade'], m['points']];
                             updIn[id.indexOf(m['user_id'])] = (m['key'] == process.env.SIGNIN_KEY) ? [5] : [0];
                         });

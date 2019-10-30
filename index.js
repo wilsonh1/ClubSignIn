@@ -174,7 +174,7 @@ function updateEmail (senderId, email) {
             console.log("Error updating email: " + errU);
         else {
             if (!docsU.n)
-                sendMessage(senderId, {text: "Not found."});
+                sendMessage(senderId, {text: "Sign in first."});
             else
                 sendMessage(senderId, {text: "Email updated."});
         }
@@ -191,7 +191,7 @@ function updateGrade (senderId, grade) {
             console.log("Error updating grade: " + errU);
         else {
             if (!docsU.n)
-                sendMessage(senderId, {text: "Not found."});
+                sendMessage(senderId, {text: "Sign in first."});
             else
                 sendMessage(senderId, {text: "Grade updated."});
         }

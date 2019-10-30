@@ -61,9 +61,9 @@ function processMessage (event) {
         console.log("Message is: " + JSON.stringify(message));
         console.log("Message sent at: " + sent);
 
-        const notRec = "Message not recognized. Send \"help\" for a list of valid messages.";
+        const notRecognized = "Message not recognized. Send \"help\" for a list of valid messages.";
         if (!message.text)
-            sendMessage(senderId, {text: notRec});
+            sendMessage(senderId, {text: notRecognized});
         else {
             var str = message.text.toLowerCase().split(" ");
             if (str[0] == "sign" && str[1] == "in") {
@@ -78,7 +78,7 @@ function processMessage (event) {
                 else if (str[1] == "grade")
                     updateGrade(senderId, str[2]);
                 else
-                    sendMessage(senderId, {text: notRec});
+                    sendMessage(senderId, {text: notRecognized});
             }
             else if (str[0] == "check")
                 getField(senderId, str[1]);
@@ -91,7 +91,7 @@ function processMessage (event) {
                 sendMessage(senderId, {text: "check grade"});
             }
             else
-                sendMessage(senderId, {text: notRec});
+                sendMessage(senderId, {text: notRecognized});
         }
     }
 }

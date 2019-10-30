@@ -55,8 +55,8 @@ function updateSheet(auth) {
                     if (errQ)
                         console.log(errQ);
                     else {
-                        var updM = new Array(cnt);
-                        var updIn = new Array(cnt);
+                        var updM = new Array(id.length);
+                        var updIn = new Array(id.length);
 
                         var mObj = JSON.parse(JSON.stringify(docsQ));
                         mObj.forEach(function(m) {

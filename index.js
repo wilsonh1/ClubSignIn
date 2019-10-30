@@ -76,6 +76,8 @@ function processMessage (event) {
                     updateEmail(senderId, str[2]);
                 else if (str[1] == "grade")
                     updateGrade(senderId, str[2]);
+                else
+                    sendMessage(senderId, {text: "Message not recognized. Send \"help\" for a list of valid messages."});
             }
             else if (str[0] == "check")
                 getField(senderId, str[1]);

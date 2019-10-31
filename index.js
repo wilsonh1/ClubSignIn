@@ -138,13 +138,14 @@ function updateMember (senderId) {
                 field: {$ne: process.env.SIGNIN_KEY}
             };
             var update = {
-                $inc: {points: 5},
+                //$inc: {points: 5},
                 key: process.env.SIGNIN_KEY
             };
             Member.updateOne(query, update, function(errU, docsU) {
                 if (errU)
                     console.log("Error updating member");
                 else {
+                    console.log(docsU);
                     if (!docsU.n)
                         sendMessage(senderId, {text: "Already signed in for this week."});
                     else

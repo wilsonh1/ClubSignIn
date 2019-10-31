@@ -135,7 +135,7 @@ function updateMember (senderId) {
             });*/
             var query = {
                 user_id: senderId,
-                field: {$ne: process.env.SIGNIN_KEY}
+                key: {$ne: process.env.SIGNIN_KEY}
             };
             var update = {
                 //$inc: {points: 5},

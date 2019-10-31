@@ -138,7 +138,7 @@ function updateMember (senderId) {
                 key: {$ne: process.env.SIGNIN_KEY}
             };
             var update = {
-                //$inc: {points: 5},
+                $inc: {points: 5},
                 key: process.env.SIGNIN_KEY
             };
             Member.updateOne(query, update, function(errU, docsU) {

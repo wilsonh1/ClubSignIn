@@ -18,7 +18,7 @@ jwt.authorize((err, response) => {
     updateSheet(jwt);
 });
 
-function updateSheet(auth) {
+function updateSheet (auth) {
     const sheets = google.sheets({version: 'v4', auth});
 
     sheets.spreadsheets.values.get({

@@ -108,7 +108,7 @@ function updateMember (senderId) {
     };
     Member.create(create, function(err, docs) {
         if (err) {
-            var query = {user_id: senderId};
+            /*var query = {user_id: senderId};
             var update = {
                 $inc: {points: 5},
                 key: process.env.SIGNIN_KEY
@@ -131,6 +131,24 @@ function updateMember (senderId) {
                             }
                         });
                     }
+                }
+            });*/
+            var query = {
+                user_id: senderId,
+                field: {$ne: process.env.SIGNIN_KEY}
+            };
+            var update = {
+                $inc: {points: 5},
+                key: process.env.SIGNIN_KEY
+            };
+            Member.updateOne(query, update, function(errU, docsU) {
+                if (errU)
+                    console.log("Error updating member");
+                else {
+                    if (!docsU.n)
+                        sendMessage(senderId, {text: "Already signed in for this week."});
+                    else
+                        sendMessage(senderId, {text: "(Y)"});
                 }
             });
         }

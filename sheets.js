@@ -132,6 +132,7 @@ function updateSheet (auth) {
                         range = range.replace('A', process.env.SHEET_NXTCOL);
                         range = range.replace('E', process.env.SHEET_NXTCOL);
                         console.log(range);
+
                         sheets.spreadsheets.values.update({
                             spreadsheetId: process.env.SHEET_ID,
                             range: range,

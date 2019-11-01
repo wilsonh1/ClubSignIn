@@ -108,31 +108,6 @@ function updateMember (senderId) {
     };
     Member.create(create, function(err, docs) {
         if (err) {
-            /*var query = {user_id: senderId};
-            var update = {
-                $inc: {points: 5},
-                key: process.env.SIGNIN_KEY
-            }
-            var mQ = Member.find({user_id: senderId}).select({key: 1, _id: 0}).lean();
-            mQ.exec(function(errQ, docsQ) {
-                if (errQ)
-                    console.log(errQ);
-                else {
-                    var mObj = JSON.parse(JSON.stringify(docsQ));
-                    if (mObj[0]['key'] == process.env.SIGNIN_KEY)
-                        sendMessage(senderId, {text: "Already signed in for this week."});
-                    else {
-                        Member.updateOne(query, update, function(errU, docsU) {
-                            if (errU)
-                                console.log("Error updating member");
-                            else {
-                                sendMessage(senderId, {text: "(Y)"});
-                                console.log("Updated " + senderId + " with " + process.env.SIGNIN_KEY);
-                            }
-                        });
-                    }
-                }
-            });*/
             var query = {
                 user_id: senderId,
                 key: {$ne: process.env.SIGNIN_KEY}
@@ -141,6 +116,7 @@ function updateMember (senderId) {
                 $inc: {points: 5},
                 key: process.env.SIGNIN_KEY
             };
+
             Member.updateOne(query, update, function(errU, docsU) {
                 if (errU)
                     console.log("Error updating member");

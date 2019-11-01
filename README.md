@@ -9,7 +9,7 @@ Messenger bot for signing into clubs.
 
 ## Usage
 + Heroku CLI
-    1. Update sign in key
+    1. Update sign-in key
         ```bash
         heroku config:set --app=club-sign-in SIGNIN_KEY=[key]
         ```
@@ -21,7 +21,7 @@ Messenger bot for signing into clubs.
         ```bash
         heroku run --app=club-sign-in node sheets.js
         ```
-    4. Update points (sign ins not made with Messenger)
+    4. Update points (sign-ins not made with Messenger)
         ```bash
         heroku run --app=club-sign-in node points.js
         ```
@@ -33,6 +33,6 @@ Messenger bot for signing into clubs.
     2. All fields must be updated on mongoDB
     2. Updating the spreadsheet will create new rows automatically
 
-+ **Note:** Previous sign ins are not stored, and sign ins are not separated by week
++ **Note:** Previous sign-ins are not stored, and sign-ins are not separated by week
     + To accurately track meetings, the spreadsheet must be updated before the next meeting
     + Do not use the same key for multiple meetings  

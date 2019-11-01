@@ -21,6 +21,10 @@ Messenger bot for signing into clubs.
         ```bash
         heroku run --app=club-sign-in node sheets.js
         ```
+    4. Update points (sign ins not made with Messenger)
+        ```bash
+        heroku run --app=club-sign-in node points.js
+        ```
 
 + Manually adding members
     1. Create a new document on mongoDB

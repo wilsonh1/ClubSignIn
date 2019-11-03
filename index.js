@@ -121,7 +121,6 @@ function updateMember (senderId) {
                 if (errU)
                     console.log("Error updating member");
                 else {
-                    console.log(docsU);
                     if (!docsU.n)
                         sendMessage(senderId, {text: "Already signed in for this week."});
                     else

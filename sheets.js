@@ -56,7 +56,7 @@ function updateSheet (auth) {
                         var mObj = JSON.parse(JSON.stringify(docsQ));
                         mObj.forEach(function(m) {
                             updM[id.indexOf(m['user_id'])] = [m['email'], m['grade'], m['points']];
-                            updIn[id.indexOf(m['user_id'])] = (m['key'] == process.env.SIGNIN_KEY) ? [5] : [0];
+                            updIn[id.indexOf(m['user_id'])] = (m['key'] == process.env.SIGNIN_KEY) ? [5] : [''];
                         });
                         console.log(updM);
                         console.log(updIn);

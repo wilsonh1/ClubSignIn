@@ -53,9 +53,6 @@ function updateSheet (auth) {
                         var updM = new Array(id.length);
                         var updIn = new Array(id.length);
 
-                        //var mqObj = JSON.parse(JSON.stringify(docsQ));
-                        console.log(mqObj.map(row => Object.values(row)));
-
                         mqObj.forEach(function(m) {
                             updM[id.indexOf(m['user_id'])] = [m['email'], m['grade'], m['points']];
                             updIn[id.indexOf(m['user_id'])] = (m['key'] == process.env.SIGNIN_KEY) ? [5] : [''];
@@ -111,7 +108,6 @@ function updateSheet (auth) {
         if (errA)
             console.log(errA);
         else {
-            //var maObj = JSON.parse(JSON.stringify(docsA));
             if (maObj.length) {
                 const data = maObj.map(row => Object.values(row));
                 const resource = {

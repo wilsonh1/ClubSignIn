@@ -199,6 +199,7 @@ function getField (senderId, field) {
         if (errQ)
             console.log(errQ);
         else {
+            console.log(mObj);
             //var mObj = JSON.parse(JSON.stringify(docsQ));
             if (!mObj || !mObj[field])
                 sendMessage(senderId, {text: "Not found."});

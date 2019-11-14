@@ -194,13 +194,13 @@ function updateGrade (senderId, grade) {
 }
 
 function getField (senderId, field) {
-    var mQ = Member.find({user_id: senderId}).select({points: 1, email: 1, grade: 1, _id: 0}).lean();
-    mQ.exec(function(errQ, docsQ) {
+    var mQ = Member.findOne({user_id: senderId}).select({points: 1, email: 1, grade: 1, _id: 0}).lean();
+    mQ.exec(function(errQ, mObj) {
         if (errQ)
             console.log(errQ);
         else {
-            var mObj = JSON.parse(JSON.stringify(docsQ));
-            if (!mObj[0] || !mObj[0][field])
+            //var mObj = JSON.parse(JSON.stringify(docsQ));
+            if (!mObj || !mObj[field])
                 sendMessage(senderId, {text: "Not found."});
             else
                 sendMessage(senderId, {text: mObj[0][field]});

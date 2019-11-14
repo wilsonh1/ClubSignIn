@@ -54,7 +54,7 @@ function updateSheet (auth) {
                         var updIn = new Array(id.length);
 
                         //var mqObj = JSON.parse(JSON.stringify(docsQ));
-                        console.log(maObj.map(row => Object.values(row)));
+                        console.log(mqObj.map(row => Object.values(row)));
 
                         mqObj.forEach(function(m) {
                             updM[id.indexOf(m['user_id'])] = [m['email'], m['grade'], m['points']];

@@ -46,15 +46,17 @@ function updateSheet (auth) {
                     _id: 0
                 };
                 var mQ = Member.find({user_id: {$in: id}}).select(fQ).lean();
-                mQ.exec(function(errQ, docsQ) {
+                mQ.exec(function(errQ, mqObj) {
                     if (errQ)
                         console.log(errQ);
                     else {
                         var updM = new Array(id.length);
                         var updIn = new Array(id.length);
 
-                        var mObj = JSON.parse(JSON.stringify(docsQ));
-                        mObj.forEach(function(m) {
+                        //var mqObj = JSON.parse(JSON.stringify(docsQ));
+                        console.log(maObj.map(row => Object.values(row)));
+
+                        mqObj.forEach(function(m) {
                             updM[id.indexOf(m['user_id'])] = [m['email'], m['grade'], m['points']];
                             updIn[id.indexOf(m['user_id'])] = (m['key'] == process.env.SIGNIN_KEY) ? [5] : [''];
                         });
@@ -105,13 +107,13 @@ function updateSheet (auth) {
         _id: 0
     };
     var mA = Member.find({first: true}).select(fA).lean();
-    mA.exec(function(errA, docsA) {
+    mA.exec(function(errA, maObj) {
         if (errA)
             console.log(errA);
         else {
-            var mObj = JSON.parse(JSON.stringify(docsA));
-            if (mObj.length) {
-                const data = mObj.map(row => Object.values(row));
+            //var maObj = JSON.parse(JSON.stringify(docsA));
+            if (maObj.length) {
+                const data = maObj.map(row => Object.values(row));
                 const resource = {
                     values: data
                 };

@@ -10,4 +10,4 @@ var PlayerSchema = new Schema({
     time: Number
 });
 
-module.exports = mongoose.model("Player", UserSchema);
+module.exports = mongoose.model("Player", PlayerSchema);

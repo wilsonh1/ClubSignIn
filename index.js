@@ -10,6 +10,8 @@ const mongoose = require('mongoose');
 var db = mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology: true});
 var Member = require('./models/member');
 
+const ftw = require('./ftw');
+
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
 app.post('/webhook', (req, res) => {
@@ -89,7 +91,24 @@ function processMessage (event) {
                 sendMessage(senderId, {text: "check points"});
                 sendMessage(senderId, {text: "check email"});
                 sendMessage(senderId, {text: "check grade"});
+                sendMessage(senderId, {text: "ftw help"});
             }
+            else if (str[0] == "ftw") {
+                if (str[1] == "help") {
+                    sendMessage(senderId, {text: "ftw"});
+                    sendMessage(senderId, {text: "! [answer]"});
+                    sendMessage(senderId, {text: "stats"});
+                    sendMessage(senderId, {text: "reset"});
+                }
+                else
+                    ftw.getProblem(senderId);
+            }
+            else if (str[0] == "!")
+                ftw.getAnswer(senderId, str[1], sent);
+            else if (str[0] == "stats")
+                ftw.getStats(senderId);
+            else if (str[0] == "reset")
+                ftw.resetStats(senderId);
             else
                 sendMessage(senderId, {text: notRecognized});
         }
@@ -214,7 +233,7 @@ function sendMessage (recipientId, message) {
         method: "POST",
         json: {
             recipient: {id: recipientId},
-            message: message,
+            message: message
         }
     }, function (err, response, body) {
         if (err)

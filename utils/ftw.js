@@ -4,8 +4,8 @@ const request = require('request');
 
 const mongoose = require('mongoose');
 var db = mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology: true});
-var Player = require('./models/player');
-var Problem = require('./models/problem');
+var Player = require('../models/player');
+var Problem = require('../models/problem');
 
 function getProblem (senderId) {
     Problem.estimatedDocumentCount(function(err, res) {

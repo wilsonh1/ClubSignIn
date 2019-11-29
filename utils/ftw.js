@@ -32,8 +32,8 @@ function getProblem (senderId) {
                             unix: date
                         }
                         Player.updateOne({user_id: senderId}, update, {upsert: true}, function(errU, docsU) {
-                            if (errT)
-                                console.log(errT);
+                            if (errU)
+                                console.log(errU);
                             else
                                 console.log("Updated ftw player: " + senderId + " " + rand + " " + date);
                         });

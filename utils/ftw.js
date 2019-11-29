@@ -18,20 +18,27 @@ function getProblem (senderId) {
             }
             var rand = Math.floor(Math.random() * res);
 
-            Player.updateOne({user_id: senderId}, {user_id: senderId, p_id: rand}, {upsert: true}, function(errC, docsC) {
-                if (errC)
-                    console.log(errC);
-                else {
-                    console.log("Updated ftw player: " + senderId);
-                }
-            });
-
             var pQ = Problem.findOne({p_id: rand}).select({statement: 1, image: 1, _id: 0}).lean();
             pQ.exec(function(errP, pObj) {
                 if (errP)
                     console.log(errP);
                 else {
-                    sendMessage(senderId, {text: pObj['statement']}, true);
+                    sendMessage(senderId, {text: pObj['statement']}, function() {
+                        var date = new Date().getTime();
+
+                        var update = {
+                            user_id: senderId,
+                            p_id: rand,
+                            unix: date
+                        }
+                        Player.updateOne({user_id: senderId}, update, {upsert: true}, function(errU, docsU) {
+                            if (errT)
+                                console.log(errT);
+                            else
+                                console.log("Updated ftw player: " + senderId + " " + rand + " " + date);
+                        });
+                    });
+
                     if (pObj['image']) {
                         sendMessage(senderId, {
                             attachment: {
@@ -45,7 +52,6 @@ function getProblem (senderId) {
                     }
                 }
             });
-
         }
     });
 }
@@ -120,7 +126,7 @@ function resetStats (senderId) {
     });
 }
 
-function sendMessage (recipientId, message, flag = false) {
+function sendMessage (recipientId, message, callback) {
     request({
         url: "https://graph.facebook.com/v4.0/me/messages",
         qs: {access_token: process.env.PAGE_ACCESS_TOKEN},
@@ -132,15 +138,8 @@ function sendMessage (recipientId, message, flag = false) {
     }, function (err, response, body) {
         if (err)
             console.log("Error sending messages: " + err);
-        else if (flag) {
-            var date = new Date().getTime();
-            Player.updateOne({user_id: recipientId}, {unix: date}, function(errT, docsT) {
-                if (errT)
-                    console.log(errT);
-                else
-                    console.log("Set ftw time: " + recipientId + " " + date);
-            });
-        }
+        else if (callback)
+            callback();
     });
 }
 

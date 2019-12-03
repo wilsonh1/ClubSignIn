@@ -26,7 +26,11 @@ function getProblem (senderId) {
                     sendMessage(senderId, {text: pObj['statement']}, function() {
                         var date = new Date().getTime();
 
-                        Player.updateOne({user_id: senderId}, {p_id: rand, unix: date}, {upsert: true}, function(errU, docsU) {
+                        var update = {
+                            p_id: rand,
+                            unix: date
+                        };
+                        Player.updateOne({user_id: senderId}, update, {upsert: true}, function(errU, docsU) {
                             if (errU)
                                 console.log(errU);
                             else
@@ -79,7 +83,12 @@ function getAnswer (senderId, answer, sent) {
                     else
                         sendMessage(senderId, {text: "Incorrect " + diff + "s"});
 
-                    Player.updateOne({user_id: senderId}, {p_id: -1, unix: 0, $inc: {count: 1, correct: upd, time: diff}}, function(errU, docsU) {
+                    var update = {
+                        p_id: -1,
+                        unix: 0,
+                        $inc: {count: 1, correct: upd, time: diff}
+                    };
+                    Player.updateOne({user_id: senderId}, update, function(errU, docsU) {
                         if (errU)
                             console.log("Error updating player");
                         else

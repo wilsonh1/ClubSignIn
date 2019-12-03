@@ -6,8 +6,9 @@ var MemberSchema = new Schema({
     name: String,
     email: String,
     grade: Number,
+    // points will be deprecated in favor of pointsPerClub below
     points: Number,
-    pointsPerClub: {type: Map, of: Number},
+    pointsPerClub: {type: Map, of: Number, default: {}},
     key: String,
     first: Boolean
 });

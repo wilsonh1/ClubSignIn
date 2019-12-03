@@ -26,12 +26,7 @@ function getProblem (senderId) {
                     sendMessage(senderId, {text: pObj['statement']}, function() {
                         var date = new Date().getTime();
 
-                        var update = {
-                            user_id: senderId,
-                            p_id: rand,
-                            unix: date
-                        }
-                        Player.updateOne({user_id: senderId}, update, {upsert: true}, function(errU, docsU) {
+                        Player.updateOne({user_id: senderId}, {p_id: rand, unix: date}, {upsert: true}, function(errU, docsU) {
                             if (errU)
                                 console.log(errU);
                             else

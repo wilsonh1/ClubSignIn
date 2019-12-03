@@ -7,6 +7,7 @@ var MemberSchema = new Schema({
     email: String,
     grade: Number,
     points: Number,
+    pointsPerClub: {type: Map, of: Number},
     key: String,
     first: Boolean
 });

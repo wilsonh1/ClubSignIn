@@ -151,5 +151,6 @@ module.exports = {
     getProblem,
     getAnswer,
     getStats,
-    resetStats
+    resetStats,
+    sendMessage
 };

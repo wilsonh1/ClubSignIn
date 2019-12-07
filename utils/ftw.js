@@ -351,7 +351,7 @@ function endCountdown (gameId) {
             uObj.forEach(function(u) {
                 while (u['points'] < uObj[rank]['points'])
                     rank++;
-                sendMessage(u['user_id'], {text: "Rank " + (rank + 1) + "with " + u['points'] + " points."});
+                sendMessage(u['user_id'], {text: "Rank " + (rank + 1) + " with " + u['points'] + " points."});
             });
 
             deleteCountdown([gameId]);

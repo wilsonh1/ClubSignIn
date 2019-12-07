@@ -125,13 +125,13 @@ function getAnswer (senderId, answer, sent) {
 
 function deleteCountdown (id) {
     Countdown.deleteMany({game_id: {$in: id}}, function(errC, docsC) {
-        if (err)
-            console.log(err);
+        if (errC)
+            console.log(errC);
     });
 
     Player.updateMany({game_id: {$in: id}}, {game_id: -1}, function(errP, docsP) {
-        if (err)
-            console.log(err);
+        if (errP)
+            console.log(errP);
     });
 }
 

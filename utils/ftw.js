@@ -334,7 +334,7 @@ function endQuestion (gameId, pind) {
             })
 
             cObj['users'].forEach(function(u) {
-                sendMessage(u, {text: "Time up !"});
+                sendMessage(u, {text: "Time's up !"});
             });
             setTimeout(function(){ startQuestion(gameId, pind + 1); }, 3000);
         }

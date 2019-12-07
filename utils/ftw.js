@@ -328,7 +328,7 @@ function endQuestion (gameId, pind) {
                 return;
             }
 
-            Players.updateMany({user_id: {$in: cObj['users']}}, {p_id: -1, unix: 0}, function(errU, docsU) {
+            Player.updateMany({user_id: {$in: cObj['users']}}, {p_id: -1, unix: 0}, function(errU, docsU) {
                 if (errU)
                     console.log(errU);
             })

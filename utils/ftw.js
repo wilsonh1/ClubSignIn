@@ -98,7 +98,7 @@ function getAnswer (senderId, answer, sent) {
                 else {
                     var upd = (pObj['answer'] == answer);
                     if (uObj['game_id'])
-                        updateCowndown(uObj['game_id'], senderId, upd, diff);
+                        updateCowntdown(uObj['game_id'], senderId, upd, diff);
                     else {
                         if (upd)
                             sendMessage(senderId, {text: "Correct ! " + diff + "s"});

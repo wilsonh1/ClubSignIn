@@ -331,12 +331,13 @@ function endQuestion (gameId, pind) {
             Player.updateMany({user_id: {$in: cObj['users']}}, {p_id: -1, unix: 0}, function(errU, docsU) {
                 if (errU)
                     console.log(errU);
-            })
-
-            cObj['users'].forEach(function(u) {
-                sendMessage(u, {text: "Time's up !"});
+                else {
+                    cObj['users'].forEach(function(u) {
+                        sendMessage(u, {text: "Time's up !"});
+                    });
+                    setTimeout(function(){ startQuestion(gameId, pind + 1); }, 3000);
+                }
             });
-            setTimeout(function(){ startQuestion(gameId, pind + 1); }, 3000);
         }
     });
 }

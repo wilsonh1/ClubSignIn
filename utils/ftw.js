@@ -295,7 +295,7 @@ function startCountdown (senderId) {
 }
 
 function startQuestion (gameId, pind) {
-    var cQ = Countdown.find({game_id: gameId}).select({users: 1, problems: 1, tpp: 1, _id: 0}).lean();
+    var cQ = Countdown.findOne({game_id: gameId}).select({users: 1, problems: 1, tpp: 1, _id: 0}).lean();
     cQ.exec(function(err, cObj) {
         if (err)
             console.log(err);

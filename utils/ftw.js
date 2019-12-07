@@ -212,7 +212,7 @@ function setGameID (cObj, senderId) {
 }
 
 function joinCountdown (senderId, gameId) {
-    Countdown.update({game_id: gameId}, {$push: {users: senderId}}, function(err, docs) {
+    Countdown.updateOne({game_id: gameId}, {$addToSet: {users: senderId}}, function(err, docs) {
         if (err)
             console.log(err);
         else if (!docs.n)
@@ -243,7 +243,7 @@ function leaveCountdown (senderId) {
             if (!uObj || !uObj['game_id'] || uObj['game_id'] == -1)
                 sendMessage(senderId, {text: "Game not found."});
             else {
-                Countdown.update({game_id: uObj['game_id']}, {$pull: {users: senderId}}, function(errD, docsD){
+                Countdown.updateOne({game_id: uObj['game_id']}, {$pull: {users: senderId}}, function(errD, docsD){
                     if (errD)
                         console.log(errD);
                     else

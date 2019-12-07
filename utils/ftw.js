@@ -177,12 +177,12 @@ function createCountdown (senderId, pcnt, tpp) {
                 tpp: tpp,
                 unix: inf
             }
-            setGameID(cObj);
+            setGameID(cObj, senderId);
         }
     })
 }
 
-function setGameID (cObj) {
+function setGameID (cObj, senderId) {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     var gameId = "";
     for (var i = 0; i < 5; i++)
@@ -191,7 +191,7 @@ function setGameID (cObj) {
     cObj['game_id'] = gameId;
     Countdown.create(cObj, function(errC, docsC) {
         if (errC)
-            setGameID(cObj);
+            setGameID(cObj, senderId);
         else {
             console.log("Created game " + JSON.stringify(cObj));
 

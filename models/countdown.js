@@ -11,4 +11,4 @@ var CountdownSchema = new Schema({
     best: String
 });
 
-module.exports = mongoose.model("Member", MemberSchema);
+module.exports = mongoose.model("Countdown", CountdownSchema);

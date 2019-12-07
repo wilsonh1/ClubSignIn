@@ -129,7 +129,7 @@ function deleteCountdown (id) {
             console.log(err);
     });
 
-    Players.updateMany({game_id: {$in: id}}, {game_id: -1}, function(errP, docsP) {
+    Player.updateMany({game_id: {$in: id}}, {game_id: -1}, function(errP, docsP) {
         if (err)
             console.log(err);
     });
@@ -141,10 +141,12 @@ function createCountdown (senderId, pcnt, tpp) {
     cQ.exec(function(errF, gObj) {
         if (errF)
             console.log(errF);
-        if (gObj) {
+        else {
             var id = gObj.map(row => Object.values(row)[0]);
-            console.log("Deleting " + id.length + " expired games");
-            deleteCountdown(id);
+            if (id.length) {
+                console.log("Deleting " + id.length + " expired games");
+                deleteCountdown(id);
+            }
         }
     });
 

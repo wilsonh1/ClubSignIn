@@ -227,9 +227,9 @@ function joinCountdown (senderId, gameId) {
                 if (errU)
                     console.log(errU);
                 else {
-                    if (docsU && docsU['game_id'])
-                        sendMessage(senderId, {text: "Left game " + docsU['game_id']});
-                    sendMessage(senderId, {text: "Joined game " + gameId});
+                    if (docsU && docsU['game_id'] && docsU['game_id'] != -1)
+                        sendMessage(senderId, {text: "Left game: " + docsU['game_id']});
+                    sendMessage(senderId, {text: "Joined game: " + gameId});
                 }
             });
         }
@@ -248,7 +248,7 @@ function leaveCountdown (senderId) {
                     if (errD)
                         console.log(errD);
                     else
-                        sendMessage(senderId, {text: "Left game " + uObj['game_id']});
+                        sendMessage(senderId, {text: "Left game: " + uObj['game_id']});
                 });
             }
         }
@@ -300,14 +300,14 @@ function startQuestion (gameId, pind) {
         if (err)
             console.log(err);
         else {
-            if (!users.length) {
+            if (!cObj['users'].length) {
                 deleteCountdown([gameId]);
                 return;
             }
             if (pind == cObj['problems'].length)
                 endCountdown(gameId);
             else {
-                users.forEach(function(u) {
+                cObj['users'].forEach(function(u) {
                     sendProblem(u, cObj['problems'][pind]);
                 });
                 setTimeout(function(){ endQuestion(gameId, pind); }, cObj['tpp'] * 1000);

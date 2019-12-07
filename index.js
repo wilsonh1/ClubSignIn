@@ -103,6 +103,24 @@ function processMessage (event) {
                 else
                     ftw.getProblem(senderId);
             }
+            else if (str[0] == "countdown") {
+                if (str[1] && str[2]) {
+                    if (isNaN(str[1]) || isNaN(str[2]))
+                        sendMessage(senderId, {text: notRecognized});
+                    else
+                        ftw.createCountdown(senderId, str[1], str[2]);
+                }
+                else
+                    ftw.createCountdown(senderId, 10, 45);
+            }
+            else if (str[0] == "join")
+                ftw.joinCountdown(senderId, str[1]);
+            else if (str[0] == "leave")
+                ftw.leaveCountdown(senderId);
+            else if (str[0] == "info")
+                ftw.getCountdown(senderId);
+            else if (str[0] == "start")
+                ftw.startCountdown(senderId);
             else if (str[0] == "!")
                 ftw.getAnswer(senderId, str[1], sent);
             else if (str[0] == "stats")

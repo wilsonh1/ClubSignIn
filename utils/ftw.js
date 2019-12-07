@@ -336,7 +336,7 @@ function endQuestion (gameId, pind) {
             cObj['users'].forEach(function(u) {
                 sendMessage(u, {text: "Time up !"});
             });
-            setTimeout(function(){ startQuestion(uObj['game_id'], pind + 1); }, 3000);
+            setTimeout(function(){ startQuestion(gameId, pind + 1); }, 3000);
         }
     });
 }
@@ -361,7 +361,7 @@ function endCountdown (gameId) {
 
 function updateCountdown (gameId, senderId, upd, diff) {
     if (!upd) {
-        sendMessage(senderId, {text: "Incorrect"  + diff + "s +0"});
+        sendMessage(senderId, {text: "Incorrect "  + diff + "s +0"});
         return;
     }
 

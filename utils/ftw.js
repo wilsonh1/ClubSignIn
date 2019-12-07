@@ -212,6 +212,7 @@ function setGameID (cObj, senderId) {
 }
 
 function joinCountdown (senderId, gameId) {
+    console.log(senderId + " " + gameId);
     Countdown.updateOne({game_id: gameId}, {$addToSet: {users: senderId}}, function(err, docs) {
         if (err)
             console.log(err);

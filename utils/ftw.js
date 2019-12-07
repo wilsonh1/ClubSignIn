@@ -183,7 +183,7 @@ function createCountdown (senderId, pcnt, tpp) {
 }
 
 function setGameID (cObj, senderId) {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
     var gameId = "";
     for (var i = 0; i < 5; i++)
         gameId += chars[Math.floor(Math.random() * chars.length)];

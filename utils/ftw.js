@@ -155,6 +155,7 @@ function checkExpired (senderId, callback) {
                 if (errU)
                     console.log(errU);
                 else {
+                    console.log(uObj);
                     if (uObj && id.indexOf(uObj['game_id']) == -1)
                         sendMessage(senderId, {text: "Currently in game."});
                     else

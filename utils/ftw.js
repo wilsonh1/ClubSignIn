@@ -137,8 +137,7 @@ function deleteCountdown (id) {
     });
 }
 
-function checkExpired (senderId, callback) {
-    var date = new Date().getTime();
+function checkExpired (senderId, date, callback) {
     var cQ = Countdown.find({created: {$lt: date - 24*60*60*1000}}).select({game_id: 1, _id: 0}).lean();
     cQ.exec(function(errF, gObj) {
         if (errF)
@@ -167,7 +166,8 @@ function checkExpired (senderId, callback) {
 }
 
 function createCountdown (senderId, pcnt, tpp) {
-    checkExpired(senderId, function() {
+    var date = new Date().getTime();
+    checkExpired(senderId, date, function() {
         if (tpp < 10) {
             sendMessage(senderId, {text: "Invalid time per problem (minimum 10 seconds)."});
             return;

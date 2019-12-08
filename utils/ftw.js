@@ -137,7 +137,7 @@ function deleteCountdown (id) {
     });
 }
 
-function createCountdown (senderId, pcnt, tpp) {
+function checkExpired (senderId, callback) {
     var date = new Date().getTime();
     var cQ = Countdown.find({created: {$lt: date - 24*60*60*1000}}).select({game_id: 1, _id: 0}).lean();
     cQ.exec(function(errF, gObj) {
@@ -149,40 +149,56 @@ function createCountdown (senderId, pcnt, tpp) {
                 console.log("Deleting " + id.length + " expired games");
                 deleteCountdown(id);
             }
+
+            var uQ = Player.findOne({user_id: senderId}).select({game_id: 1, _id: 0}).lean();
+            uQ.exec(function(errU, uObj) {
+                if (errU)
+                    console.log(errU);
+                else {
+                    if (uObj && id.indexOf(uObj['game_id']) == -1)
+                        sendMessage(senderId, {text: "Currently in game."});
+                    else
+                        callback();
+                }
+            });
         }
     });
+}
 
-    if (tpp < 10) {
-        sendMessage(senderId, {text: "Invalid time per problem (minimum 10 seconds)."});
-        return;
-    }
-    Problem.estimatedDocumentCount(function(err, res) {
-        if (err)
-            console.log(err);
-        else {
-            if (!res || res < pcnt || pcnt > 20) {
-                sendMessage(senderId, {text: "Invalid problem count (maximum " + Math.min(res, 20) + ")."});
-                return;
-            }
-            var plist = [];
-            while (plist.length < pcnt) {
-                var rand = Math.floor(Math.random() * res);
-                if (plist.indexOf(rand) ==  -1)
-                    plist.push(rand);
-            }
-
-            var cObj = {
-                game_id: "",
-                created: date,
-                users: [senderId],
-                problems: plist,
-                tpp: tpp,
-                launched: false,
-                unix: inf
-            }
-            setGameID(cObj, senderId);
+function createCountdown (senderId, pcnt, tpp) {
+    checkExpired(senderId, function() {
+        if (tpp < 10) {
+            sendMessage(senderId, {text: "Invalid time per problem (minimum 10 seconds)."});
+            return;
         }
-    })
+        Problem.estimatedDocumentCount(function(err, res) {
+            if (err)
+                console.log(err);
+            else {
+                if (!res || res < pcnt || pcnt > 20) {
+                    sendMessage(senderId, {text: "Invalid problem count (maximum " + Math.min(res, 20) + ")."});
+                    return;
+                }
+                var plist = [];
+                while (plist.length < pcnt) {
+                    var rand = Math.floor(Math.random() * res);
+                    if (plist.indexOf(rand) ==  -1)
+                        plist.push(rand);
+                }
+
+                var cObj = {
+                    game_id: "",
+                    created: date,
+                    users: [senderId],
+                    problems: plist,
+                    tpp: tpp,
+                    launched: false,
+                    unix: inf
+                }
+                setGameID(cObj, senderId);
+            }
+        });
+    });
 }
 
 function setGameID (cObj, senderId) {

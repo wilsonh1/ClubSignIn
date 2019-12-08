@@ -108,7 +108,7 @@ function getAnswer (senderId, answer, sent) {
                             console.log("Error updating player");
                         else {
                             console.log("Updated player " + senderId + " " + upd);
-                            
+
                             if (uObj['game_id'])
                                 updateCountdown(uObj['game_id'], senderId, upd, diff);
                             else {
@@ -161,7 +161,7 @@ function createCountdown (senderId, pcnt, tpp) {
             console.log(err);
         else {
             if (!res || res < pcnt || pcnt > 20) {
-                sendMessage(senderId, {text: "Invalid problem count (maximum " + Math.max(res, 20) + ")."});
+                sendMessage(senderId, {text: "Invalid problem count (maximum " + Math.min(res, 20) + ")."});
                 return;
             }
             var plist = [];

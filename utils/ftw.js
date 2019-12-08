@@ -158,8 +158,8 @@ function createCountdown (senderId, pcnt, tpp) {
         if (err)
             console.log(err);
         else {
-            if (!res || res < pcnt) {
-                sendMessage(senderId, {text: "Invalid problem count (maximum " + res + ")."});
+            if (!res || res < pcnt || pcnt > 20) {
+                sendMessage(senderId, {text: "Invalid problem count (maximum " + Math.max(res, 20) + ")."});
                 return;
             }
             var plist = [];

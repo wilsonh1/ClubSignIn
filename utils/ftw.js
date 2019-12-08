@@ -175,6 +175,7 @@ function createCountdown (senderId, pcnt, tpp) {
                 users: [senderId],
                 problems: plist,
                 tpp: tpp,
+                launched: false,
                 unix: inf
             }
             setGameID(cObj, senderId);
@@ -288,8 +289,16 @@ function startCountdown (senderId) {
         else {
             if (!uObj || !uObj['game_id'] || uObj['game_id'] == -1)
                 sendMessage(senderId, {text: "Game not found."});
-            else
-                setTimeout(function(){startQuestion(uObj['game_id'], 0);}, 3000);
+            else {
+                Countdown.updateOne({game_id: uObj['game_id']}, {launched: true}, function(errC, cObj) {
+                    if (errC)
+                        console.log(errC);
+                    else if (!cObj.nModified)
+                        sendMessage(senderId, {text: "Game already started."});
+                    else
+                        setTimeout(function(){startQuestion(uObj['game_id'], 0);}, 3000);
+                });
+            }
         }
     });
 }

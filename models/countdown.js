@@ -7,6 +7,7 @@ var CountdownSchema = new Schema({
     users: [String],
     problems: [Number],
     tpp: Number,
+    launched: Boolean,
     unix: Number,
     best: String
 });

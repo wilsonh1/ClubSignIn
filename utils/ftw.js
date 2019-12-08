@@ -343,7 +343,7 @@ function endQuestion (gameId, pind) {
 }
 
 function endCountdown (gameId) {
-    var uQ = Player.find({game_id: gameId}).sort({points: 1}).select({user_id: 1, points: 1, _id: 0}).lean();
+    var uQ = Player.find({game_id: gameId}).sort({points: -1}).select({user_id: 1, points: 1, _id: 0}).lean();
     uQ.exec(function(err, uObj) {
         if (err)
             console.log(err);
@@ -373,11 +373,11 @@ function updateCountdown (gameId, senderId, upd, diff) {
         else {
             if (cObj['unix'] <= diff) {
                 sendMessage(senderId, {text: "Correct ! " + diff + "s +0"});
-                sendMessage(senderId, {text: "Problem already answered " + (diff - cObj['unix']) + "s"});
+                sendMessage(senderId, {text: "Problem already answered " + (diff - cObj['unix']).toFixed(3) + "s"});
             }
             else {
                 if (cObj['unix'] != inf) {
-                    sendMessage(cObj['best'], {text: "Sniped " + (cObj['unix'] - diff) + "s -1"});
+                    sendMessage(cObj['best'], {text: "Sniped " + (cObj['unix'] - diff).toFixed(3) + "s -1"});
                     Player.updateOne({user_id: cObj['best']}, {$inc: {points: -1}}, function(errU, docsU) {
                         if (errU)
                             console.log(errU);

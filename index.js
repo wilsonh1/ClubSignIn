@@ -104,7 +104,7 @@ function processMessage (event) {
                     ftw.getProblem(senderId);
             }
             else if (str[0] == "countdown") {
-                if (str[1] && str[2]) {
+                if (str[1] || str[2]) {
                     if (isNaN(str[1]) || isNaN(str[2]))
                         sendMessage(senderId, {text: notRecognized});
                     else

@@ -97,14 +97,6 @@ function getAnswer (senderId, answer, sent) {
                     console.log(err2);
                 else {
                     var upd = (pObj['answer'] == answer);
-                    if (uObj['game_id'])
-                        updateCountdown(uObj['game_id'], senderId, upd, diff);
-                    else {
-                        if (upd)
-                            sendMessage(senderId, {text: "Correct ! " + diff + "s"});
-                        else
-                            sendMessage(senderId, {text: "Incorrect " + diff + "s"});
-                    }
 
                     var update = {
                         p_id: -1,
@@ -114,8 +106,18 @@ function getAnswer (senderId, answer, sent) {
                     Player.updateOne({user_id: senderId}, update, function(errU, docsU) {
                         if (errU)
                             console.log("Error updating player");
-                        else
+                        else {
                             console.log("Updated player " + senderId + " " + upd);
+                            
+                            if (uObj['game_id'])
+                                updateCountdown(uObj['game_id'], senderId, upd, diff);
+                            else {
+                                if (upd)
+                                    sendMessage(senderId, {text: "Correct ! " + diff + "s"});
+                                else
+                                    sendMessage(senderId, {text: "Incorrect " + diff + "s"});
+                            }
+                        }
                     });
                 }
             });

@@ -10,8 +10,46 @@ var Countdown = require('../models/countdown');
 
 const inf = 1e18;
 
-function getProblem (senderId) {
+function checkInGame (senderId, flag, callback, id = []) {
     var uQ = Player.findOne({user_id: senderId}).select({game_id: 1, _id: 0}).lean();
+    uQ.exec(function(errU, uObj) {
+        if (errU)
+            console.log(errU);
+        else {
+            var in = (uObj && uObj['game_id'] != -1 && id.indexOf(uObj['game_id']) == -1);
+            if (flag) {
+                if (in)
+                    sendMessage(senderId, {text: "Currently in game."});
+                else
+                    callback();
+            }
+            else {
+                if (!in)
+                    sendMessage(senderId, {text: "Game not found."});
+                else
+                    callback(uObj['game_id']);
+            }
+        }
+    });
+}
+
+// Done
+function getProblem (senderId) {
+    checkInGame(senderId, true, function() {
+        Problem.estimatedDocumentCount(function(err, res) {
+            if (err)
+                console.log(err);
+            else {
+                if (!res) {
+                    sendMessage(senderId, {text: "No problems found."});
+                    return;
+                }
+                var rand = Math.floor(Math.random() * res);
+                sendProblem(senderId, rand);
+            }
+        });
+    });
+    /*var uQ = Player.findOne({user_id: senderId}).select({game_id: 1, _id: 0}).lean();
     uQ.exec(function(err, uObj) {
         if (err)
             console.log(err);
@@ -35,7 +73,7 @@ function getProblem (senderId) {
                 });
             }
         }
-    });
+    });*/
 }
 
 function sendProblem (senderId, pid) {
@@ -137,6 +175,7 @@ function deleteCountdown (id) {
     });
 }
 
+// Done
 function checkExpired (senderId, date, callback) {
     var cQ = Countdown.find({created: {$lt: date - 24*60*60*1000}}).select({game_id: 1, _id: 0}).lean();
     cQ.exec(function(errF, gObj) {
@@ -149,7 +188,9 @@ function checkExpired (senderId, date, callback) {
                 deleteCountdown(id);
             }
 
-            var uQ = Player.findOne({user_id: senderId}).select({game_id: 1, _id: 0}).lean();
+            callback(id);
+
+            /*var uQ = Player.findOne({user_id: senderId}).select({game_id: 1, _id: 0}).lean();
             uQ.exec(function(errU, uObj) {
                 if (errU)
                     console.log(errU);
@@ -160,45 +201,48 @@ function checkExpired (senderId, date, callback) {
                     else
                         callback();
                 }
-            });
+            });*/
         }
     });
 }
 
 function createCountdown (senderId, pcnt, tpp) {
     var date = new Date().getTime();
-    checkExpired(senderId, date, function() {
-        if (tpp < 10) {
-            sendMessage(senderId, {text: "Invalid time per problem (minimum 10 seconds)."});
-            return;
-        }
-        Problem.estimatedDocumentCount(function(err, res) {
-            if (err)
-                console.log(err);
-            else {
-                if (!res || res < pcnt || pcnt > 20) {
-                    sendMessage(senderId, {text: "Invalid problem count (maximum " + Math.min(res, 20) + ")."});
-                    return;
-                }
-                var plist = [];
-                while (plist.length < pcnt) {
-                    var rand = Math.floor(Math.random() * res);
-                    if (plist.indexOf(rand) ==  -1)
-                        plist.push(rand);
-                }
-
-                var cObj = {
-                    game_id: "",
-                    created: date,
-                    users: [senderId],
-                    problems: plist,
-                    tpp: tpp,
-                    launched: false,
-                    unix: inf
-                }
-                setGameID(cObj, senderId);
+    checkExpired(date, function(id) {
+        //checkInGame(senderId, true, function() {callback()}, id)
+        checkInGame(senderId, true, function() {
+            if (tpp < 10) {
+                sendMessage(senderId, {text: "Invalid time per problem (minimum 10 seconds)."});
+                return;
             }
-        });
+            Problem.estimatedDocumentCount(function(err, res) {
+                if (err)
+                    console.log(err);
+                else {
+                    if (!res || res < pcnt || pcnt > 20) {
+                        sendMessage(senderId, {text: "Invalid problem count (maximum " + Math.min(res, 20) + ")."});
+                        return;
+                    }
+                    var plist = [];
+                    while (plist.length < pcnt) {
+                        var rand = Math.floor(Math.random() * res);
+                        if (plist.indexOf(rand) ==  -1)
+                            plist.push(rand);
+                    }
+
+                    var cObj = {
+                        game_id: "",
+                        created: date,
+                        users: [senderId],
+                        problems: plist,
+                        tpp: tpp,
+                        launched: false,
+                        unix: inf
+                    }
+                    setGameID(cObj, senderId);
+                }
+            });
+        }, id);
     });
 }
 
@@ -232,8 +276,30 @@ function setGameID (cObj, senderId) {
 }
 
 function joinCountdown (senderId, gameId) {
-    console.log(senderId + " " + gameId);
-    Countdown.updateOne({game_id: gameId}, {$addToSet: {users: senderId}}, function(err, docs) {
+    checkInGame(senderId, true, function() {
+        Countdown.updateOne({game_id: gameId}, {$addToSet: {users: senderId}}, function(err, docs) {
+            if (err)
+                console.log(err);
+            else if (!docs.n)
+                sendMessage(senderId, {text: "Game not found."});
+            else {
+                var update = {
+                    game_id: gameId,
+                    points: 0
+                }
+                Player.updateOne({user_id: senderId}, update, {upsert: true}, function(errP, docsP) {
+                    if (errP)
+                        console.log(errP);
+                    else {
+                        //if (docsU && docsU['game_id'] && docsU['game_id'] != -1)
+                        //    sendMessage(senderId, {text: "Left game: " + docsU['game_id']});
+                        sendMessage(senderId, {text: "Joined game: " + gameId});
+                    }
+                });
+            }
+        });
+    });
+    /*Countdown.updateOne({game_id: gameId}, {$addToSet: {users: senderId}}, function(err, docs) {
         if (err)
             console.log(err);
         else if (!docs.n)
@@ -253,11 +319,26 @@ function joinCountdown (senderId, gameId) {
                 }
             });
         }
-    });
+    });*/
 }
 
+// TODO: checkInGame
 function leaveCountdown (senderId) {
-    Player.findOneAndUpdate({user_id: senderId}, {game_id: -1}, function(errU, uObj) {
+    checkInGame(senderId, false, function(gameId) {
+        Countdown.updateOne({game_id: gameId}, {$pull: {users: senderId}}, function(errD, docsD){
+            if (errD)
+                console.log(errD);
+            else {
+                Player.updateOne({user_id: senderId}, {game_id: -1}, function(errP, docsP) {
+                    if (errP)
+                        console.log(errP);
+                    else
+                        sendMessage(senderId, {text: "Left game: " + uObj['game_id']});
+                });
+            }
+        });
+    });
+    /*Player.findOneAndUpdate({user_id: senderId}, {game_id: -1}, function(errU, uObj) {
         if (errU)
             console.log(errU);
         else {
@@ -272,11 +353,25 @@ function leaveCountdown (senderId) {
                 });
             }
         }
-    });
+    });*/
 }
 
+// TODO: checkInGame
 function getCountdown (senderId) {
-    var uQ = Player.findOne({user_id: senderId}).select({game_id: 1, _id: 0}).lean();
+    checkInGame(senderId, false, function(gameId) {
+        var cQ = Countdown.findOne({game_id: gameId}).select({users: 1, problems: 1, tpp: 1, _id: 0}).lean();
+        cQ.exec(function(errC, cObj) {
+            if (errC)
+                console.log(errC);
+            else {
+                sendMessage(senderId, {text: "Game ID: " + gameId});
+                sendMessage(senderId, {text: "Problem count: " + cObj['problems'].length});
+                sendMessage(senderId, {text: "Time per problem: " + cObj['tpp']});
+                sendMessage(senderId, {text: "Players: " + cObj['users'].length});
+            }
+        });
+    });
+    /*var uQ = Player.findOne({user_id: senderId}).select({game_id: 1, _id: 0}).lean();
     uQ.exec(function(err, uObj) {
         if (err)
             console.log(err);
@@ -297,11 +392,22 @@ function getCountdown (senderId) {
                 });
             }
         }
-    });
+    });*/
 }
 
+// TEMP: checkInGame
 function startCountdown (senderId) {
-    var uQ = Player.findOne({user_id: senderId}).select({game_id: 1, _id: 0}).lean();
+    checkInGame(senderId, false, function(gameId) {
+        Countdown.updateOne({game_id: gameId}, {launched: true}, function(errC, docsC) {
+            if (errC)
+                console.log(errC);
+            else if (!docsC.nModified)
+                sendMessage(senderId, {text: "Game already started."});
+            else
+                setTimeout(function(){startQuestion(gameId, 0);}, 5000);
+        });
+    });
+    /*var uQ = Player.findOne({user_id: senderId}).select({game_id: 1, _id: 0}).lean();
     uQ.exec(function(err, uObj) {
         if (err)
             console.log(err);
@@ -319,7 +425,7 @@ function startCountdown (senderId) {
                 });
             }
         }
-    });
+    });*/
 }
 
 function startQuestion (gameId, pind) {
@@ -328,8 +434,8 @@ function startQuestion (gameId, pind) {
         if (err)
             console.log(err);
         else {
-            console.log(gameId);
-            console.log(JSON.stringify(cObj));
+            //console.log(gameId);
+            //console.log(JSON.stringify(cObj));
             if (!cObj['users'].length) {
                 deleteCountdown([gameId]);
                 return;
@@ -362,8 +468,12 @@ function endQuestion (gameId, pind) {
                 else {
                     cObj['users'].forEach(function(u) {
                         sendMessage(u, {text: "Time's up !"});
+                        if (cObj['unix'] == inf)
+                            sendMessage(u, {text: "Question answered by no one."});
+                        else
+                            sendName(u, cObj['best'], cObj['unix']);
                     });
-                    setTimeout(function(){ startQuestion(gameId, pind + 1); }, 3000);
+                    setTimeout(function(){ startQuestion(gameId, pind + 1); }, 5000);
                 }
             });
         }
@@ -443,8 +553,14 @@ function getStats (senderId) {
     });
 }
 
+// TODO:
 function resetStats (senderId) {
-    Player.deleteOne({user_id: senderId}, function(err, docs) {
+    var update = {
+        count: 0,
+        correct: 0,
+        time: 0
+    }
+    Player.updateOne({user_id: senderId}, update, function(err, docs) {
         if (err)
             console.log(err);
         else {
@@ -452,6 +568,25 @@ function resetStats (senderId) {
                 sendMessage(senderId, {text: "Not found."});
             else
                 sendMessage(senderId, {text: "Reset FTW stats."});
+        }
+    });
+}
+
+function sendName (recipientId, nameId, unix) {
+    request({
+        url: "https://graph.facebook.com/v4.0/" + senderId,
+        qs: {
+            access_token: process.env.PAGE_ACCESS_TOKEN,
+            fields: "name"
+        },
+        method: "GET"
+    }, function (err, response, body) {
+        if (err)
+            console.log("Error getting user's name: " +  err);
+        else {
+            var bodyObj = JSON.parse(body);
+            var name = bodyObj.name;
+            sendMessage(recipientId, {text: "Question answered by " + name + " " + unix + "s."});
         }
     });
 }

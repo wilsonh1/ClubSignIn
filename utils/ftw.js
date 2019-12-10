@@ -176,7 +176,7 @@ function deleteCountdown (id) {
 }
 
 // Done
-function checkExpired (senderId, date, callback) {
+function checkExpired (date, callback) {
     var cQ = Countdown.find({created: {$lt: date - 24*60*60*1000}}).select({game_id: 1, _id: 0}).lean();
     cQ.exec(function(errF, gObj) {
         if (errF)

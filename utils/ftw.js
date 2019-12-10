@@ -575,7 +575,7 @@ function resetStats (senderId) {
 
 function sendName (recipientId, nameId, unix) {
     request({
-        url: "https://graph.facebook.com/v4.0/" + name,
+        url: "https://graph.facebook.com/v4.0/" + nameId,
         qs: {
             access_token: process.env.PAGE_ACCESS_TOKEN,
             fields: "name"

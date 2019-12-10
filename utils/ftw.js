@@ -239,6 +239,7 @@ function createCountdown (senderId, pcnt, tpp) {
                         launched: false,
                         unix: inf
                     }
+                    console.log(JSON.stringify(cObj));
                     setGameID(cObj, senderId);
                 }
             });

@@ -16,15 +16,15 @@ function checkInGame (senderId, flag, callback, id = []) {
         if (errU)
             console.log(errU);
         else {
-            var in = (uObj && uObj['game_id'] != -1 && id.indexOf(uObj['game_id']) == -1);
+            var inGame = (uObj && uObj['game_id'] != -1 && id.indexOf(uObj['game_id']) == -1);
             if (flag) {
-                if (in)
+                if (inGame)
                     sendMessage(senderId, {text: "Currently in game."});
                 else
                     callback();
             }
             else {
-                if (!in)
+                if (!inGame)
                     sendMessage(senderId, {text: "Game not found."});
                 else
                     callback(uObj['game_id']);

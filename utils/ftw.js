@@ -33,7 +33,6 @@ function checkInGame (senderId, flag, callback, id = []) {
     });
 }
 
-// Done
 function getProblem (senderId) {
     checkInGame(senderId, true, function() {
         Problem.estimatedDocumentCount(function(err, res) {
@@ -49,31 +48,6 @@ function getProblem (senderId) {
             }
         });
     });
-    /*var uQ = Player.findOne({user_id: senderId}).select({game_id: 1, _id: 0}).lean();
-    uQ.exec(function(err, uObj) {
-        if (err)
-            console.log(err);
-        else {
-            if (uObj) {
-                sendMessage(senderId, {text: "Currently in game."});
-                return;
-            }
-            else {
-                Problem.estimatedDocumentCount(function(err, res) {
-                    if (err)
-                        console.log(err);
-                    else {
-                        if (!res) {
-                            sendMessage(senderId, {text: "No problems found."});
-                            return;
-                        }
-                        var rand = Math.floor(Math.random() * res);
-                        sendProblem(senderId, rand);
-                    }
-                });
-            }
-        }
-    });*/
 }
 
 function sendProblem (senderId, pid) {
@@ -175,7 +149,6 @@ function deleteCountdown (id) {
     });
 }
 
-// Done
 function checkExpired (date, callback) {
     var cQ = Countdown.find({created: {$lt: date - 24*60*60*1000}}).select({game_id: 1, _id: 0}).lean();
     cQ.exec(function(errF, gObj) {
@@ -189,19 +162,6 @@ function checkExpired (date, callback) {
             }
 
             callback(id);
-
-            /*var uQ = Player.findOne({user_id: senderId}).select({game_id: 1, _id: 0}).lean();
-            uQ.exec(function(errU, uObj) {
-                if (errU)
-                    console.log(errU);
-                else {
-                    console.log(uObj);
-                    if (uObj && uObj['game_id'] != -1 && id.indexOf(uObj['game_id']) == -1)
-                        sendMessage(senderId, {text: "Currently in game."});
-                    else
-                        callback();
-                }
-            });*/
         }
     });
 }
@@ -209,7 +169,6 @@ function checkExpired (date, callback) {
 function createCountdown (senderId, pcnt, tpp) {
     var date = new Date().getTime();
     checkExpired(date, function(id) {
-        //checkInGame(senderId, true, function() {callback()}, id)
         checkInGame(senderId, true, function() {
             if (tpp < 10) {
                 sendMessage(senderId, {text: "Invalid time per problem (minimum 10 seconds)."});
@@ -291,39 +250,14 @@ function joinCountdown (senderId, gameId) {
                 Player.updateOne({user_id: senderId}, update, {upsert: true}, function(errP, docsP) {
                     if (errP)
                         console.log(errP);
-                    else {
-                        //if (docsU && docsU['game_id'] && docsU['game_id'] != -1)
-                        //    sendMessage(senderId, {text: "Left game: " + docsU['game_id']});
+                    else
                         sendMessage(senderId, {text: "Joined game: " + gameId});
-                    }
                 });
             }
         });
     });
-    /*Countdown.updateOne({game_id: gameId}, {$addToSet: {users: senderId}}, function(err, docs) {
-        if (err)
-            console.log(err);
-        else if (!docs.n)
-            sendMessage(senderId, {text: "Game not found."});
-        else {
-            var update = {
-                game_id: gameId,
-                points: 0
-            }
-            Player.findOneAndUpdate({user_id: senderId}, update, {upsert: true}, function(errU, docsU) {
-                if (errU)
-                    console.log(errU);
-                else {
-                    if (docsU && docsU['game_id'] && docsU['game_id'] != -1)
-                        sendMessage(senderId, {text: "Left game: " + docsU['game_id']});
-                    sendMessage(senderId, {text: "Joined game: " + gameId});
-                }
-            });
-        }
-    });*/
 }
 
-// TODO: checkInGame
 function leaveCountdown (senderId) {
     checkInGame(senderId, false, function(gameId) {
         Countdown.updateOne({game_id: gameId}, {$pull: {users: senderId}}, function(errD, docsD){
@@ -339,25 +273,8 @@ function leaveCountdown (senderId) {
             }
         });
     });
-    /*Player.findOneAndUpdate({user_id: senderId}, {game_id: -1}, function(errU, uObj) {
-        if (errU)
-            console.log(errU);
-        else {
-            if (!uObj || !uObj['game_id'] || uObj['game_id'] == -1)
-                sendMessage(senderId, {text: "Game not found."});
-            else {
-                Countdown.updateOne({game_id: uObj['game_id']}, {$pull: {users: senderId}}, function(errD, docsD){
-                    if (errD)
-                        console.log(errD);
-                    else
-                        sendMessage(senderId, {text: "Left game: " + uObj['game_id']});
-                });
-            }
-        }
-    });*/
 }
 
-// TODO: checkInGame
 function getCountdown (senderId) {
     checkInGame(senderId, false, function(gameId) {
         var cQ = Countdown.findOne({game_id: gameId}).select({users: 1, problems: 1, tpp: 1, _id: 0}).lean();
@@ -372,31 +289,8 @@ function getCountdown (senderId) {
             }
         });
     });
-    /*var uQ = Player.findOne({user_id: senderId}).select({game_id: 1, _id: 0}).lean();
-    uQ.exec(function(err, uObj) {
-        if (err)
-            console.log(err);
-        else {
-            if (!uObj || !uObj['game_id'] || uObj['game_id'] == -1)
-                sendMessage(senderId, {text: "Game not found."});
-            else {
-                var cQ = Countdown.findOne({game_id: uObj['game_id']}).select({users: 1, problems: 1, tpp: 1, _id: 0}).lean();
-                cQ.exec(function(errC, cObj) {
-                    if (errC)
-                        console.log(errC);
-                    else {
-                        sendMessage(senderId, {text: "Game ID: " + uObj['game_id']});
-                        sendMessage(senderId, {text: "Problem count: " + cObj['problems'].length});
-                        sendMessage(senderId, {text: "Time per problem: " + cObj['tpp']});
-                        sendMessage(senderId, {text: "Players: " + cObj['users'].length});
-                    }
-                });
-            }
-        }
-    });*/
 }
 
-// TEMP: checkInGame
 function startCountdown (senderId) {
     checkInGame(senderId, false, function(gameId) {
         Countdown.updateOne({game_id: gameId}, {launched: true}, function(errC, docsC) {
@@ -408,25 +302,6 @@ function startCountdown (senderId) {
                 setTimeout(function(){startQuestion(gameId, 0);}, 5000);
         });
     });
-    /*var uQ = Player.findOne({user_id: senderId}).select({game_id: 1, _id: 0}).lean();
-    uQ.exec(function(err, uObj) {
-        if (err)
-            console.log(err);
-        else {
-            if (!uObj || !uObj['game_id'] || uObj['game_id'] == -1)
-                sendMessage(senderId, {text: "Game not found."});
-            else {
-                Countdown.updateOne({game_id: uObj['game_id']}, {launched: true}, function(errC, cObj) {
-                    if (errC)
-                        console.log(errC);
-                    else if (!cObj.nModified)
-                        sendMessage(senderId, {text: "Game already started."});
-                    else
-                        setTimeout(function(){startQuestion(uObj['game_id'], 0);}, 3000);
-                });
-            }
-        }
-    });*/
 }
 
 function startQuestion (gameId, pind) {
@@ -554,7 +429,6 @@ function getStats (senderId) {
     });
 }
 
-// TODO:
 function resetStats (senderId) {
     var update = {
         count: 0,

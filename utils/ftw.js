@@ -334,7 +334,7 @@ function leaveCountdown (senderId) {
                     if (errP)
                         console.log(errP);
                     else
-                        sendMessage(senderId, {text: "Left game: " + uObj['game_id']});
+                        sendMessage(senderId, {text: "Left game: " + gameId});
                 });
             }
         });

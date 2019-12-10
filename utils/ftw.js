@@ -19,7 +19,7 @@ function checkInGame (senderId, flag, callback, id = []) {
             var inGame = (uObj && uObj['game_id'] != -1 && id.indexOf(uObj['game_id']) == -1);
             if (flag) {
                 if (inGame)
-                    sendMessage(senderId, {text: "Currently in game."});
+                    sendMessage(senderId, {text: "Currently in game " + uObj['game_id'] + "."});
                 else
                     callback();
             }

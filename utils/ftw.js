@@ -310,8 +310,6 @@ function startQuestion (gameId, pind) {
         if (err)
             console.log(err);
         else {
-            //console.log(gameId);
-            //console.log(JSON.stringify(cObj));
             if (!cObj['users'].length) {
                 deleteCountdown([gameId]);
                 return;

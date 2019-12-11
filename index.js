@@ -99,12 +99,21 @@ function processMessage (event) {
                     sendMessage(senderId, {text: "! [answer]"});
                     sendMessage(senderId, {text: "stats"});
                     sendMessage(senderId, {text: "reset"});
+                    sendMessage(senderId, {text: "countdown help"});
                 }
                 else
                     ftw.getProblem(senderId);
             }
             else if (str[0] == "countdown") {
-                if (str[1] || str[2]) {
+                if (str[1] == "help") {
+                    sendMessage(senderId, {text: "countdown [# of problems] [time per problem (seconds)] - default 10 + 45"});
+                    sendMessage(senderId, {text: "join [game id]"});
+                    sendMessage(senderId, {text: "leave"});
+                    sendMessage(senderId, {text: "info"});
+                    sendMessage(senderId, {text: "start"});
+                    sendMessage(senderId, {text: "! [answer]"});
+                }
+                else if (str[1] || str[2]) {
                     if (isNaN(str[1]) || isNaN(str[2]))
                         sendMessage(senderId, {text: notRecognized});
                     else

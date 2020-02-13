@@ -16,6 +16,7 @@ function checkInGame (senderId, flag, callback, id = []) {
         if (errU)
             console.log(errU);
         else {
+            console.log(uObj['game_id']);
             var inGame = (uObj && uObj['game_id'] && uObj['game_id'] != -1 && id.indexOf(uObj['game_id']) == -1);
             if (flag) {
                 if (inGame)

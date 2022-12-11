@@ -18,7 +18,7 @@
   "homepage": "https://github.com/wilsonh1/ClubSignIn#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "google-auth-library": "^6.0.6",
     "googleapis": "^59.0.0",
     "jsonwebtoken": "^8.5.1",
